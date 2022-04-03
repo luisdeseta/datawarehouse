@@ -5,8 +5,8 @@ require('dotenv').config()
 const jwt = require('jsonwebtoken');
 const sequelize = require('../services/conection');
 const { Sequelize, DataTypes, Model, QueryTypes, Op } = require('sequelize');
-const expressJwt = require('express-jwt');
 const req = require('express/lib/request');
+const expressJwt = require('express-jwt');
 const expJWT = expressJwt({ secret: process.env.SECRET_TOKEN, algorithms: ['HS512'] });
 
 
@@ -30,7 +30,7 @@ const User = sequelize.define("users", {
         },
         profile:{
             type: DataTypes.TEXT,
-            allowNull: false,
+            allowNull: true,
         }
     },
 { timestamps: false,}
@@ -79,13 +79,20 @@ router.post('/user/login', async (req, res) =>{
     },process.env.SECRET_TOKEN,
     {algorithm: 'HS512' });
 
-    res.status(200).json({token})
+    //res.status(200).json({token});
+    res.header('Authorization', token).json({token});
 })//end login
 
+router.get('/testing', expJWT, async (req, res) =>{
+    const token = req.header('Authorization');
+    console.log(token);
+    res.status(200).json(token);
+
+})
 //USUARIOS: Son las personas que usan el sistema
 
 //Crear usuario nuevo
-router.post('/user/create/', expJWT, async (req, res) =>{
+router.post('/user/',expJWT, async (req, res) =>{
     //validar si es admin o configuarar ruta exclusiva
     console.log("user role  " + req.user.profile)
     if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"})
@@ -106,14 +113,15 @@ router.post('/user/create/', expJWT, async (req, res) =>{
             password: pass,
             profile: req.body.profile
         })
-        res.status(200).json({Mensaje: `Usuario creado con éxito`})
+        res.status(200).json({Mensaje: `Usuario creado con éxito`});
+        
     } catch (error) {
         res.status(400).json({Mensaje: "no se pudo crear el usuario", Error: error})
     }
 })
 
 //Consultar usuarios
-router.get('/user/query', expJWT, async (req, res) => {
+router.get('/user', expJWT, async (req, res) => {
     console.log("user role  " + req.user.profile)
     if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"})
     try {
@@ -129,7 +137,7 @@ router.get('/user/query', expJWT, async (req, res) => {
 })
 
 //Borrar usuario
-router.delete('/user/delete', expJWT, async (req, res) => {
+router.delete('/user', expJWT, async (req, res) => {
     console.log("user role  " + req.user.profile)
     if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"})
     //TODO primero buscar y luego borrar
@@ -150,7 +158,7 @@ router.delete('/user/delete', expJWT, async (req, res) => {
 })
 
 //Actualizar usuario
-router.put('/user/update', expJWT, async (req, res) => {
+router.put('/user', expJWT, async (req, res) => {
     console.log("user role  " + req.user.profile)
     if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"});
     //TODO primero buscar y luego actualizar
