@@ -1,3 +1,5 @@
+//REVISAR Y ELIMINAR
+
 //constantes
 const urlLogin = `http://localhost:3010/admin/login`;
 const urlUSER = `http://localhost:3010/api/user`;
@@ -6,6 +8,7 @@ const urlUSER = `http://localhost:3010/api/user`;
 
 //services
 
+//login del admin
 export const apiLogin = (data) =>{
     console.log('apiLogin '+ data);
     var myHeaders = new Headers();
@@ -29,7 +32,7 @@ export const apiLogin = (data) =>{
 
 export const createUSER = (data) =>{
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbS5hciIsInBhc3N3b3JkIjoiJDJiJDEwJHZILndKWnB0d0syR1ouVEVpWkkuT3VYdFR4em1vY08vM3Fhb3lDV1pLSkN6eXpCeTZyY2lhIiwicHJvZmlsZSI6IkEiLCJpYXQiOjE2NDg0MjU3NjN9.YrOTCyz2gOemyZ4dxT7PRyl6CaSxLfNs7t3_zc9rOEslJo5EUzUbJWNs6QhJ5HwzYSxP6oqA7f37ReQU62jDZw");
+    //myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbS5hciIsInBhc3N3b3JkIjoiJDJiJDEwJHZILndKWnB0d0syR1ouVEVpWkkuT3VYdFR4em1vY08vM3Fhb3lDV1pLSkN6eXpCeTZyY2lhIiwicHJvZmlsZSI6IkEiLCJpYXQiOjE2NTE5NTk2OTR9.4RTSIN-TknL9D_vT2QP-0BFWw_mwVSRg6zWoo9Jfs821bZnbAiXVGZdAjXDU9B20Fc1dgFm-SJUw7Mi6-y_bVA");
     myHeaders.append('Content-Type', 'application/json');
     const requestOptions = {
         method: 'POST',

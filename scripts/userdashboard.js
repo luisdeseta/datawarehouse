@@ -1,6 +1,6 @@
-import {createUSER } from '../services/services.js';
+import { fetchdata } from './fetchdata.js';
 
- 
+
 //constantes
 const NAME = document.querySelector('#name');
 const LASTNAME = document.querySelector('#lastName');
@@ -8,6 +8,8 @@ const EMAIL = document.querySelector('#emailInput');
 const PROFILE = document.querySelector('#profile');
 const PASS = document.querySelector('#inputPassword');
 const USERBTN = document.querySelector('#createUserbtn');
+
+const urlUSER = `http://localhost:3010/api/user`;
 
 const create = () =>{
     const data = {
@@ -19,16 +21,15 @@ const create = () =>{
     }
     
     //console.log('create => '+data)
-    createUSER(data)
+    fetchdata(urlUSER, "POST", data)
     .then((res)=>{
-        console.log(res)
-        
+        console.log("creatUser res => ", res)
+
     })
     .catch((err)=>{
-        console.log('error =>' + err)
+        console.log('error =>', err)
     })
 }
-
 
 
 USERBTN.addEventListener('click', create)

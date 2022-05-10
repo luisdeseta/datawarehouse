@@ -1,31 +1,72 @@
 //constantes
-const jwt = require('jsonwebtoken');
+const { header } = require("express/lib/request");
+const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
+const { Sequelize, DataTypes, Model, QueryTypes, Op } = require('sequelize');
+const User = require('../models/users');
 
-// usar solo el JWT sacar el 
-//const expressJwt = require('express-jwt');
-//const expJWT = expressJwt({ secret: process.env.SECRET_TOKEN, algorithms: ['HS512'] });
 
 /**
- * TODO 
+ * Validar si envia el TOKEN
+ */
+const validateToken = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization; 
+    if (!authHeader)
+      return res.status(200).send({
+        error: true,
+        message:
+          "Se debe proveer un header 'Authorization' con el formato: 'Bearer <Token>'",
+      });
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.SECRET_TOKEN);
+    console.log('authHeader ',authHeader)  
+    if (decoded) {  
+      req.userProfile = decoded; //envio el objeto con usuario y profile al otro middleware
+      return next();
+    }
+
+   return res.status(200).json({ error: true, message: "Token invalido" });
+  } catch (err) {
+    return res.status(200).send({
+      error: true,
+      message: 'Token invalido. Debe proveerse con el formato: "Bearer <token>"',
+    });
+  }
+};
+
+/**
+ * TODO
  * Validar usuario
  * Validar Admin para rutas protegidas
  */
-const isAdmin = (req, res, next) =>{
-    //token
-    const authHeader = req.header('Authorization');
-    //const token = req.header('Authorization');
-    const token = authHeader.split(' ')[1];
-    console.log('isAdmin => '+token);
-    if (!token) return res.status(401).json({ error: 'Acceso denegado' });
-    try {
-        const verified = jwt.verify(token, process.env.SECRET_TOKEN)
-        req.user = verified
-        next() // continuamos
-    } catch (error) {
-        res.status(400).json({error: 'token no es válido'})
+const isAdmin = (req, res, next) => {
+  if (req.userProfile.profile == "A") {
+    return next();
+    
+  } 
+  return res.status(201).send({
+    message: "Usuario sin autorización"
+  })
+};
+
+/**
+ * Validar el login
+ * 
+ */
+const validateLogin = async (req, res, next) =>{
+  //busco por email
+  const userLogin = await User.findAll({
+    where:{  [Op.or]: [{email : req.body.usuario}, {first_name : req.body.usuario}]
     }
-    //if
-
+  
+  });
+    //Valido pass
+    const userPass = await bcrypt.compare(req.body.pass, userLogin[0].password);
+    if (!userPass) return res.status(400).json({Mensaje: "Email o password incorrecto!!"});
+    console.log('userPass ' + userPass);
+    req.userLogin = userLogin;
+    next();
 }
-
-module.exports = isAdmin;
+module.exports = {isAdmin, validateToken, validateLogin};

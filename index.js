@@ -14,16 +14,16 @@ app.use(express.urlencoded({ extended: true })); //true o false?
 app.use(express.json());
 
 //Importar Rutas
-const auth = require('./routes/auth')
+const auth = require('./routes/auth');
 const {router, User}= require('./routes/users');
 const {region_route, Region}= require('./routes/region');
 
 //Middlewares
-const isAdmin = require('./services/middleware')
+const {isAdmin, validateToken, validateLogin} = require('./services/middleware')
 //Rutas
 app.use(cors());
 app.use('/admin', auth)
-app.use('/api', router); 
+app.use('/api',validateToken, isAdmin, router); 
 app.use('/geo', region_route);
 
 //Test

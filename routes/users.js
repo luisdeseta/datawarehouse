@@ -79,8 +79,8 @@ router.post('/user/login', async (req, res) =>{
     },process.env.SECRET_TOKEN,
     {algorithm: 'HS512' });
 
-    //res.status(200).json({token});
-    res.header('Authorization', token).json({token});
+    res.status(200).json({token});
+    //res.header('Authorization', token).json({token});
 })//end login
 
 router.get('/testing', expJWT, async (req, res) =>{
@@ -92,15 +92,15 @@ router.get('/testing', expJWT, async (req, res) =>{
 //USUARIOS: Son las personas que usan el sistema
 
 //Crear usuario nuevo
-router.post('/user/',expJWT, async (req, res) =>{
-    //validar si es admin o configuarar ruta exclusiva
+router.post('/user/', async (req, res) =>{
+    /* //validar si es admin o configuarar ruta exclusiva
     console.log("user role  " + req.user.profile)
     if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"})
     //valido si email existe en base de datos
     const validEmail = await sequelize.query(`SELECT * from users 
     WHERE email ='${req.body.email}' 
     `, {type: sequelize.QueryTypes.SELECT})
-    if (validEmail.length != 0 ) return res.status('403').json({mensaje: "ya existe ese email"}) 
+    if (validEmail.length != 0 ) return res.status('403').json({mensaje: "ya existe ese email"})  */
     try {
         //HASH password
         const saltos = await bcrypt.genSalt(10);
@@ -113,7 +113,7 @@ router.post('/user/',expJWT, async (req, res) =>{
             password: pass,
             profile: req.body.profile
         })
-        res.status(200).json({Mensaje: `Usuario creado con éxito`});
+        res.status(200).json({Mensaje: `Usuario creado con éxito`, newUser});
         
     } catch (error) {
         res.status(400).json({Mensaje: "no se pudo crear el usuario", Error: error})
@@ -121,20 +121,53 @@ router.post('/user/',expJWT, async (req, res) =>{
 })
 
 //Consultar usuarios
-router.get('/user', expJWT, async (req, res) => {
-    console.log("user role  " + req.user.profile)
-    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"})
+router.get('/user/:email', async (req, res) => {
+    /* console.log("user role  ", req.user.profile)
+    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}) */
     try {
-        const users = await User.findAll({
-            where: { email:{[Op.like]: `%${req.body.email}%`} }
-        });
-        res.status(200).json({users}) 
-        console.log("users +" + users);
+       const {email} = req.params;
+       const users = await User.findAll({
+        where: { email:{[Op.like]: `%${email}%`} }
+    });
+    res.status(200).json({users}) 
+    console.log(users);
 
     } catch (error) {
         res.status(400).json({Status: "Error en la sentencia SQL"})
     }
 })
+
+//Consultar usuarios DELETE!!!!!!!!!!!!!!
+router.purge('/user', async (req, res) => {
+    /* console.log("user role  ", req.user.profile)
+    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}) */
+    try {
+        const users = await User.findAll({
+            where: { email:{[Op.like]: `%${req.body.email}%`} }
+        });
+        res.status(200).json({users}) 
+        console.log(users);
+
+    } catch (error) {
+        res.status(400).json({Status: "Error en la sentencia SQL"})
+    }
+})
+
+router.get('/user/all', async (req, res) => {
+    /* console.log("user role  ", req.user.profile)
+    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}) */
+    try {
+        const users = await User.findAll({
+            
+        });
+        res.status(200).json({users}) 
+        console.log(users);
+
+    } catch (error) {
+        res.status(400).json({Status: "Error en la sentencia SQL"})
+    }
+})
+
 
 //Borrar usuario
 router.delete('/user', expJWT, async (req, res) => {
