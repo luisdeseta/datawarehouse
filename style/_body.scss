@@ -5,4 +5,33 @@
 h2{
     margin: 15px;
 }
- 
+//formulario actuliazación de usuario
+#formContainer{
+    display: none;
+    position:fixed;
+    justify-content: center;
+    //flex-wrap: wrap;
+    z-index: 100;
+    //left: 0;
+    //top: 0;
+    width: 75vw;
+    height: 75vw;
+    background-color: rgb(245, 163, 163);
+    border: 1px black;
+
+    #formUserupdate{
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        justify-content: left;
+        padding: 5px 5px;
+        
+    }
+
+    #btnContainer{
+        display: flex;
+        padding: 20px 20px 0px 0px;
+        gap: 15px;
+        justify-content: right;
+    }
+} 

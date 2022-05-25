@@ -11,6 +11,10 @@ const USERBTN = document.querySelector('#createUserbtn');
 
 const urlUSER = `http://localhost:3010/api/user`;
 
+/**
+ * Crea un usuario del sistema, solo un admin
+ * TODO, VALIDAR QUE EL USUARIO EXISTE PARA NO CREAR DUPLICADOS.
+ */
 const create = () =>{
     const data = {
         first_name: NAME.value,

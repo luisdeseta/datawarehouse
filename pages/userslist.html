@@ -28,22 +28,90 @@
 <body>
     <div id="test">
 
-      <!--Inicio formulario de creacion de usuarios-->
+      <!--Inicio formulario de busqueda de usuarios-->
     <div class="col g-4" id="formUser" >
       <div class="col-md-4">
-        <label for="name" class="form-label">Nombre</label>
-        <input type="text" class="form-control" id="name" placeholder="email de usuario" required>
+        <label for="name" class="form-label">Buscar Usuario</label>
+        <input type="text" class="form-control" id="name" placeholder="ingrese nombre o email para buscar" required>
 
      
       <div class="col-12">
       <button type="submit" class="btn btn-primary" id="searchUserbtn" >Buscar</button>
       </div>
     </div>
-      <!--Fin formulario de creacion de usuarios-->
+      <!--Fin formulario de busqueda de usuarios-->
     </div>
-    <div id="testMark">
+    
+    <div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Email</th>
+            <th scope="col">Profile</th>
+            <th scope="col">Act</th>
+            <th scope="col">Del</th>
+            
+          </tr>
+        </thead>
+        <tbody id="testMark">
+          <tr>
+            <th scope="row">1</th>
+            <td>0</td>
+            <td>Mark</td>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+            <td>@mdo</td>
+          </tr>
+        </tbody>
+      </table>  
+    </div>
+    <!-- Inicio Form de Actuliazación de usuario-->
+    <div id="formContainer">
+      <div class="col g-4" id="formUserupdate" >
+        <div class="col-md-4">
+          <label for="name" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="nameForm" placeholder="Nombre de usuario" required>
+        </div>
+        <div class="col-md-4">
+          <label for="lastName" class="form-label">Apellido</label>
+          <input type="text" class="form-control" id="lastName" placeholder="Apellido de usuario" required>
+        </div>
+        <div class="col-md-4">
+          <label for="emailInput" class="form-label">Email</label>
+          <input type="email" class="form-control" id="emailInput" placeholder="nombre@example.com"> 
+        </div>
+        <div class="col-md-4">
+          <label for="profile" class="form-label">Perfil</label>
+          <input type="text" class="form-control" id="profile" placeholder="A = Admin; U = Usuario" required>
+        </div>
+        <div class="col-md-4">
+          <label for="inputPassword" class="form-label">Password</label>
+          <input type="password" class="form-control" id="inputPassword">
+        </div>
+        <div class="col-md-4">
+          <label for="inputPassword2" class="form-label">Repetir Password</label>
+          <input type="password" class="form-control" id="inputPassword2">
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+      
+        <div class="col-12" id="btnContainer">
+          <button type="submit" class="btn btn-primary" id="cancelUserbtn" >Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="updateUserbtn" >Actualizar</button>
+        </div>
+      </div>
 
-    </div>
+
+    </div>  
+
+    <!-- Inicio Form de Actuliazación de usuario-->
+
+
     <script type="module" src="../scripts/userslist.js"></script>    
 </body>
 </html>

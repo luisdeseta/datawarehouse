@@ -9,9 +9,11 @@ const cors = require('cors');
 const expJWT = expressJwt({ secret: process.env.SECRET_TOKEN, algorithms: ['HS512'] });
 
 
-
 app.use(express.urlencoded({ extended: true })); //true o false?
 app.use(express.json());
+
+
+
 
 //Importar Rutas
 const auth = require('./routes/auth');

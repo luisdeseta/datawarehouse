@@ -137,21 +137,7 @@ router.get('/user/:email', async (req, res) => {
     }
 })
 
-//Consultar usuarios DELETE!!!!!!!!!!!!!!
-router.purge('/user', async (req, res) => {
-    /* console.log("user role  ", req.user.profile)
-    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}) */
-    try {
-        const users = await User.findAll({
-            where: { email:{[Op.like]: `%${req.body.email}%`} }
-        });
-        res.status(200).json({users}) 
-        console.log(users);
 
-    } catch (error) {
-        res.status(400).json({Status: "Error en la sentencia SQL"})
-    }
-})
 
 router.get('/user/all', async (req, res) => {
     /* console.log("user role  ", req.user.profile)
@@ -170,13 +156,14 @@ router.get('/user/all', async (req, res) => {
 
 
 //Borrar usuario
-router.delete('/user', expJWT, async (req, res) => {
-    console.log("user role  " + req.user.profile)
-    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"})
-    //TODO primero buscar y luego borrar
+router.delete('/user/:id', async (req, res) => {
+    /* console.log("user role  " + req.user.profile)
+    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}) */
+    //
     try {
+        const {id} = req.params
         const deleteUser = await User.destroy({
-            where: {email: req.body.email}
+            where: {id: id}
         });
         if ( deleteUser === 0){
             res.status(404).json({Status: "Usuario no encontrado"})
@@ -185,15 +172,15 @@ router.delete('/user', expJWT, async (req, res) => {
 
         }
     } catch (error) {
-        res.status(401).json({Status: "Error en la sentencia SQL"})
+        res.status(401).json({Status: "Error en la sentencia SQL", error})
     }
 
 })
 
 //Actualizar usuario
-router.put('/user', expJWT, async (req, res) => {
-    console.log("user role  " + req.user.profile)
-    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"});
+router.put('/user', async (req, res) => {
+/*     console.log("user role  " + req.user.profile)
+    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}); */
     //TODO primero buscar y luego actualizar
     try {
         const userUpdate = await sequelize.query(`
@@ -210,7 +197,7 @@ router.put('/user', expJWT, async (req, res) => {
                 _profile: req.body.profile || undefined
             }
         })
-        console.log("userUpdate " + userUpdate)
+        console.log("userUpdate ", userUpdate)
         res.status(200).json({
             Status: "Usuario Actualizado con éxito"});
 

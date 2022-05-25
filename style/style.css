@@ -5,4 +5,42 @@
 h2 {
   margin: 15px;
 }
+
+#formContainer {
+  display: none;
+  position: fixed;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  z-index: 100;
+  width: 75vw;
+  height: 75vw;
+  background-color: #f5a3a3;
+  border: 1px black;
+}
+
+#formContainer #formUserupdate {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-line-pack: start;
+      align-content: flex-start;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  padding: 5px 5px;
+}
+
+#formContainer #btnContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 20px 20px 0px 0px;
+  gap: 15px;
+  -webkit-box-pack: right;
+      -ms-flex-pack: right;
+          justify-content: right;
+}
 /*# sourceMappingURL=style.css.map */
