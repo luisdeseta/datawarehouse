@@ -42,7 +42,7 @@ region_route.post('/region', async (req, res) =>{
         res.json({Mensaje: `Region ${req.body.regionName} creado con éxito`});
         
     } catch (error) {
-        console.log("el error" + error)
+        console.log("el error ", error)
     }
 })
 
@@ -58,7 +58,7 @@ region_route.get('/region', async (req, res) =>{
         //console.log(queryRegion[0].dataValues.name)
         //console.log(queryRegion)
     } catch (error) {
-        console.log("el error" + error)
+        console.log("el error ", error)
     }
 })
 
@@ -82,7 +82,7 @@ region_route.put('/region', async (req, res) =>{
         res.status(200).json({newName: verifyRegion2[0].name})
 
     } catch (error) {
-        console.log("el error" + error)
+        console.log("el error ",  error)
     }
 })
 
@@ -101,7 +101,7 @@ region_route.delete('/region', async (req, res) =>{
         res.status(200).json({newName: `Registro ${req.body.regionName} eliminado`})
 
     } catch (error) {
-        console.log("el error" + error)
+        console.log("el error ", error)
     }
 })
 

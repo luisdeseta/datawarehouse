@@ -4,7 +4,7 @@ import { fetchdata, getdata, deldata } from './fetchdata.js';
 //Constantes
 const NAME = document.querySelector('#name');
 const USERSEARCHBTN = document.querySelector('#searchUserbtn');
-const FORM = document.querySelector('#formUserupdate');
+const USERFORMUPDATE = document.querySelector('#UserFormUpdate');
 const FORMCONTAINER = document.getElementById('formContainer');
 //Constantes form update de usuario
 const NAMEUPDATE = document.querySelector('#nameForm');
@@ -57,20 +57,19 @@ const searchUser = () =>{
         .then(()=>{
             for (let i = 0; i < array.length; i++) {
                 const delUserBTN = document.getElementById(`del-${array[i].id}`);
-                const updateUserBTN = document.getElementById(`act-${array[i].id}`);
+                const updateBTN = document.getElementById(`act-${array[i].id}`);
                 
                 delUserBTN.addEventListener('click', function () {delUser(array[i].id) } );
-                updateUserBTN.addEventListener('click', 
+                updateBTN.addEventListener('click', 
                         function () {
                             //alert(array[i].first_name)
-                            FORMCONTAINER.style.diplay="flex",
-                            console.log(FORMCONTAINER)
-                       /*      ,setValueUser(
+                            FORMCONTAINER.style.display = "flex";
+                            setValueUser(
                             i,
                             array[i].first_name,
                             array[i].last_name, 
                             array[i].email, 
-                            array[i].profile );  */
+                            array[i].profile );  
                         });
                     }
             })
@@ -93,8 +92,8 @@ const markUpSearch = (order, id, name, last, email, profile) => {
     <td>${last}</td>
     <td>${email}</td>
     <td>${profile}</td>
-    <td id="act-${id}">Act</td>
-    <td id="del-${id}">Del</td>
+    <td id="act-${id}"><button class="btn btn-primary me-md-2" type="button">Actualizar</button></td>
+    <td id="del-${id}"><button class="btn btn-primary me-md-2" type="button">Borrar</button></td>
   </tr>
     `
 }
@@ -120,7 +119,9 @@ const delUser = (userID) =>{
  */
 const setValueUser = (order, name,last, email, profile)=>{
     const listToUpdate = JSON.parse( sessionStorage.getItem("userList")) ;
-    console.log(listToUpdate[order]);
+    //console.log("listToUpdate  ", listToUpdate[order]);
+    
+    //carga el valor en cada campo
     NAMEUPDATE.setAttribute('value',name);
     LASTNAME.setAttribute('value',last);
     EMAIL.setAttribute('value',email);
@@ -143,11 +144,15 @@ const updateUser = () =>  {
     }
     fetchdata(urlUSER,'PUT', data)
     .then((res) => {
-        console.log("res ", res)
-        const dataReset = document.querySelectorAll('#nameForm, #lastName, #emailInput, #profile, #inputPassword')
+        console.log("res ", res);
+        //reseteo los valores del form
+        const value = ''
+         const dataReset = document.querySelectorAll('#nameForm, #lastName, #emailInput, #profile, #inputPassword')
         dataReset.forEach(input => {
-            input.value = '';
+            input.setAttribute('value',value);
         });
+        //borro los datos buscados del sessionStorage
+        sessionStorage.removeItem("userList");
         
         //const form = document.getElementById('formUserupdate');  
         //form.reset();
