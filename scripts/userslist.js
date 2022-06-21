@@ -1,4 +1,4 @@
-import { fetchdata, getdata, deldata } from './fetchdata.js';
+import { fetchdata, getdata, deldata } from '../routes/fetchdata.js';
 
 
 //Constantes

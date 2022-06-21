@@ -1,5 +1,5 @@
-import {apiLogin } from '../services/services.js';
-import { fetchdata } from './fetchdata.js';
+import {apiLogin } from '../routes/services.js';
+import { fetchdata } from '../routes/fetchdata.js';
 
 //FRONT END
 

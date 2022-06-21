@@ -1,0 +1,115 @@
+const country_route = require('express').Router();
+const bcrypt = require('bcrypt');
+const validator = require('validator');
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
+const sequelize = require('../services/conection');
+const { Sequelize, DataTypes, Model, QueryTypes, Op } = require('sequelize');
+const expressJwt = require('express-jwt');
+const req = require('express/lib/request');
+
+// CRUD de paises
+const Country = sequelize.define("countries", {
+    regions_id:{
+        type:DataTypes.TEXT,
+        allowNull: false,
+                validate:{
+                    notNull:{msg: "el campo region no puede ser null"}
+                }
+    },
+    name: {
+        type:DataTypes.TEXT,
+        allowNull: false,
+                validate:{
+                    notNull:{msg: "el campo País no puede ser null"}
+                }
+        },
+        
+},
+{ timestamps: false,}
+)
+
+country_route.post('/country', async (req, res) =>{
+    //Verifica si el pais ya existe
+    const verifyCountry = await Country.findAll({
+        where: {name: req.body.countryName} 
+    })
+    if (verifyCountry.length != 0 ) return res.status('403').json({mensaje: `${ req.body.countryName} ya existe` })
+    try {
+        const country = await Country.create({
+            regions_id: req.body.regionID,
+            name: req.body.countryName
+        })
+        res.json({Mensaje: `Pais ${req.body.countryName} creado con éxito`});
+        
+    } catch (error) {
+        res.json({Error: error})
+        console.log("el error ", error)
+    }
+})
+
+country_route.get('/country/:country', async (req, res) =>{
+    //verificar el token
+    try {
+        const {country} = req.params;
+        const queryCountry = await Country.findAll({
+            where: {name: {[Op.like]: `%${country}%`}} 
+        })
+        console.log(queryCountry)
+        if (queryCountry.length == 0) return res.status('403').json({mensaje: `${country} no existe`})
+        res.status(200).json({country: queryCountry[0].name,
+        ID:queryCountry[0].id})
+        
+        
+    } catch (error) {
+        res.json({Error: error})
+        console.log("el error ", error)
+    }
+})
+
+country_route.put('/country', async (req, res) =>{
+    //verificar token
+    //Verificar newName para no crear duplicados
+    try {
+        const verifyCountry = await Country.findAll({
+            where: {name: req.body.countryName} 
+        })
+        if (verifyCountry == 0) return res.status('403').json({mensaje: `${req.body.countryName} no existe`})
+        //revisar que req.body.newName no exista
+        //si pasa, actualizar
+        
+        await Country.update({name: req.body.newName}, {
+                    where: {name: req.body.countryName}
+                })
+        const verifyCountry2 = await Country.findAll({
+            where: {name: req.body.newName} 
+        })
+        res.status(200).json({newName: verifyCountry2[0].name})
+
+    } catch (error) {
+        console.log("el error ",  error)
+    }
+})
+
+country_route.delete('/country', async (req, res) =>{
+    //verificar token
+    //
+    try {
+        const verifyCountry = await Country.findAll({
+            where: {name: req.body.countryName} 
+        })
+        if (verifyCountry == 0) return res.status('403').json({mensaje: `${req.body.countryName} no existe`})
+
+        await Country.destroy({
+            where: {name: req.body.countryName} 
+        })
+        res.status(200).json({newName: `Registro ${req.body.countryName} eliminado`})
+
+    } catch (error) {
+        res.json({Error: error})
+        console.log("el error ", error)
+    }
+})
+
+//Exports
+module.exports = {country_route, Country}

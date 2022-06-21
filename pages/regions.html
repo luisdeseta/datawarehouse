@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <!--jstree css style-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"
+    />
+    <title>Región / Ciudad</title>
+  </head>
+
+  <header>
+    <ul class="nav justify-content-end p-3 mb-2 bg-danger text-dark">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">Contactos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="./pages/login.html"
+          >Usuarios</a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="#">Compañías</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="./regions.html"
+          >Región / Ciuadad</a
+        >
+      </li>
+    </ul>
+  </header>
+
+  <body>
+    <div id="regionTitle" class="regionTitle">
+      <h2>Regiones, Países y Ciudades</h2>
+      <h6>clic derecho para más opciones</h6>
+      <button id="addRegionBTN" class="btn btn-success btn-sm">
+        agregar Región
+      </button>
+    </div>
+    <!-- 
+    <button class="btn btn-primary btn-sm" >editar</button> <button class="btn btn-danger btn-sm">eliminar</button><button class="btn btn-success btn-sm">agregar ciudad</button> 
+-->
+    <!-- 3 setup a container element -->
+    <div id="jstree">
+      <!-- in this example the tree is populated from inline HTML -->
+      <ul>
+        <li>Root node 1
+          <ul>
+            <li id="child_node_1">Child node 1</li>
+            <li>Child node 2</li>
+          </ul>
+        </li>
+        <li>Root node 2</li>
+      </ul>
+    </div>
+
+    <!--jstree script-->
+  <!-- 4 include the jQuery library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+  <!-- 5 include the minified jstree source -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <!-- script del frontend-->
+    <script type="module" src="../scripts/regionFront.js"></script>
+  </body>
+</html>

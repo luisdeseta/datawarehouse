@@ -43,4 +43,8 @@ h2 {
       -ms-flex-pack: right;
           justify-content: right;
 }
+
+#10:hover {
+  color: red;
+}
 /*# sourceMappingURL=style.css.map */
