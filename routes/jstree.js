@@ -30,6 +30,7 @@ route_tree.get('/allzz', async (req, res) => {
     try {
         const regions = await Region.findAll(
             {
+                //entre [] es igual a "AS"
                 attributes: ['id', 'parent', ['name', 'text']]
             }
             /* {attributes: ['id', 'parent', 'name'],

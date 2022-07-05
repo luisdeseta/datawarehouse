@@ -30,16 +30,35 @@ const Region = sequelize.define("regions", {
 )
 
 
-region_route.post('/region', async (req, res) => {
+region_route.post('/regionzz/:id/:parent/:text', async (req, res) => {
     //verificar el token
     //Verifica si la region ya existe
     const verifyRegion = await Region.findAll({
-        where: { name: req.body.regionName }
+        where: { name: { [Op.like]: `%${params.text}%` } }
     })
     if (verifyRegion.length != 0) return res.status('403').json({ mensaje: `${req.body.regionName} ya existe` })
     try {
         const region = await Region.create({
-            name: req.body.regionName
+            name: params.text
+        })
+        res.json({ Mensaje: `Region ${params.text} creado con éxito` });
+
+    } catch (error) {
+        res.json({ Error: error })
+        console.log("el error ", error)
+    }
+})
+
+region_route.post('/region', async (req, res) => {
+    //verificar el token
+    //Verifica si la region ya existe
+    /* const verifyRegion = await Region.findAll({
+        where: { name: req.body.name } 
+    })
+    if (verifyRegion.length != 0) return res.status('403').json({ mensaje: `${req.body.regionName} ya existe` }) */
+    try {
+        const region = await Region.create({
+            name: req.body.name
         })
         res.json({ Mensaje: `Region ${req.body.regionName} creado con éxito` });
 
@@ -48,6 +67,7 @@ region_route.post('/region', async (req, res) => {
         console.log("el error ", error)
     }
 })
+
 
 region_route.get('/region/:region', async (req, res) => {
     //verificar el token
