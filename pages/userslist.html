@@ -71,25 +71,26 @@
         </tbody>
       </table>  
     </div>
-    <!-- Inicio Form de Actuliazación de usuario-->
+    <!-- Inicio Form de Actualización de usuario-->
     <div id="formContainer">
+      <form action="" id="theForm">
       
         <div class="col g-4" id="formUserupdate" >
           <div class="col-md-4">
             <label for="name" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nameForm" placeholder="Nombre de usuario" required>
+            <input type="text" class="form-control" id="nameForm" placeholder="Nombre de usuario" autocomplete="off" required>
           </div>
           <div class="col-md-4">
             <label for="lastName" class="form-label">Apellido</label>
-            <input type="text" class="form-control" id="lastName" placeholder="Apellido de usuario" required>
+            <input type="text" class="form-control" id="lastName" placeholder="Apellido de usuario" autocomplete="off" required>
           </div>
           <div class="col-md-4">
             <label for="emailInput" class="form-label">Email</label>
-            <input type="email" class="form-control" id="emailInput" placeholder="nombre@example.com"> 
+            <input type="email" class="form-control" id="emailInput" placeholder="nombre@example.com" autocomplete="off"> 
           </div>
           <div class="col-md-4">
             <label for="profile" class="form-label">Perfil</label>
-            <input type="text" class="form-control" id="profile" placeholder="A = Admin; U = Usuario" required>
+            <input type="text" class="form-control" id="profile" placeholder="A = Admin; U = Usuario" autocomplete="off" required>
           </div>
           <div class="col-md-4">
             <label for="inputPassword" class="form-label">Password</label>
@@ -106,13 +107,13 @@
             <button type="submit" class="btn btn-primary" id="cancelUserbtn" >Cancelar</button>
           <button type="submit" class="btn btn-primary" id="updateUserbtn" >Actualizar</button>
           </div>
-          
-      </div>
+      </form>    
+    </div>
 
 
     </div>  
 
-    <!-- Inicio Form de Actuliazación de usuario-->
+    <!-- Fin Form de Actualización de usuario-->
 
 
     <script type="module" src="../scripts/userslist.js"></script>    

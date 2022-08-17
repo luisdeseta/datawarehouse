@@ -14,8 +14,6 @@ app.use(bodyparser.json());
 app.use(express.json());
 
 
-
-
 //Importar Rutas
 const auth = require('./routes/auth');
 const { router, User } = require('./routes/users');
@@ -28,12 +26,12 @@ const { route_tree } = require('./routes/jstree')
 const { isAdmin, validateToken, validateLogin } = require('./services/middleware')
 //Rutas
 app.use(cors());
-app.use('/admin', auth)
+app.use('/admin', auth);
 app.use('/api', validateToken, isAdmin, router);
 app.use('/geo', region_route);
 app.use('/country', country_route);
 app.use('/cities', city_route);
-app.use('/tree', route_tree)
+app.use('/tree', route_tree);
 
 //Test
 app.get('/', (req, res) => {

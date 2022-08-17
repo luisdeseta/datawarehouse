@@ -7,17 +7,17 @@
    margin: 15px;
  }
 
- //formulario actuliazación de usuario
+ //formulario actualización de usuario
  #formContainer {
-   display: none;
+   display: none; //display: none; 
    position: fixed;
    justify-content: center;
    //flex-wrap: wrap;
    z-index: 100;
-   //left: 0;
-   //top: 0;
-   width: 75vw;
-   height: 75vw;
+   left: 5vw;
+   top: 5vw;
+   width: 700px;
+   height: 250px;
    background-color: rgb(245, 163, 163);
    border: 1px black;
 

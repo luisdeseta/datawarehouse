@@ -60,7 +60,7 @@ region_route.post('/region', async (req, res) => {
         const region = await Region.create({
             name: req.body.name
         })
-        res.json({ Mensaje: `Region ${req.body.regionName} creado con éxito` });
+        res.json({ Mensaje: `Region ${req.body.name} creado con éxito` });
 
     } catch (error) {
         res.json({ Error: error })
@@ -97,14 +97,14 @@ region_route.put('/region', async (req, res) => {
     //Verificar newName para no crear duplicados
     try {
         const verifyRegion = await Region.findAll({
-            where: { name: req.body.regionName }
+            where: { name: req.body.name }
         })
-        if (verifyRegion == 0) return res.status('403').json({ mensaje: `${req.body.regionName} no existe` })
+        if (verifyRegion == 0) return res.status('403').json({ mensaje: `${req.body.name} no existe` })
         //revisar que req.body.newName no exista
         //si pasa, actualizar
 
         await Region.update({ name: req.body.newName }, {
-            where: { name: req.body.regionName }
+            where: { name: req.body.name }
         })
         const verifyRegion2 = await Region.findAll({
             where: { name: req.body.newName }
@@ -122,14 +122,14 @@ region_route.delete('/region', async (req, res) => {
     //
     try {
         const verifyRegion = await Region.findAll({
-            where: { name: req.body.regionName }
+            where: { name: req.body.name }
         })
-        if (verifyRegion == 0) return res.status('403').json({ mensaje: `${req.body.regionName} no existe` })
+        if (verifyRegion == 0) return res.status('403').json({ mensaje: `${req.body.name} no existe` })
 
         await Region.destroy({
-            where: { name: req.body.regionName }
+            where: { name: req.body.name }
         })
-        res.status(200).json({ newName: `Registro ${req.body.regionName} eliminado` })
+        res.status(200).json({ newName: `Registro ${req.body.name} eliminado` })
 
     } catch (error) {
         res.json({ Error: error })

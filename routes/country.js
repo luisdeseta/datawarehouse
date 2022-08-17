@@ -105,13 +105,29 @@ country_route.delete('/country', async (req, res) => {
         await Country.destroy({
             where: { name: req.body.name }
         })
-        res.status(200).json({ newName: `Registro ${req.body.name} eliminado` })
+        res.status(200).json({ Name: `Registro ${req.body.name} eliminado` })
 
     } catch (error) {
         res.json({ Error: error })
         console.log("el error ", error)
     }
 })
+//get all countries
+country_route.get('/countries', async (req, res) => {
+    //verificar el token
+    try {
+        const queryCountry = await Country.findAll({
+            attributes: ['name'],
+        })
+        console.log(queryCountry)
+        if (queryCountry.length == 0) return res.status('403').json({ mensaje: `${country} no existe` })
+        res.status(200).send(queryCountry)
 
+
+    } catch (error) {
+        res.json({ Error: error })
+        console.log("el error ", error)
+    }
+})
 //Exports
 module.exports = { country_route, Country }

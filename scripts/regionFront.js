@@ -4,8 +4,8 @@ const testBTN = document.querySelector('#addRegionBTN')
 //URL para fetch
 const urlRegion = `http://localhost:3010/geo/region/`;
 const urlCountry = `http://localhost:3010/country/country`;
-const urlRegiontest = `http://localhost:3010/geo/region/`;
-const test = 'http://localhost:3010/tree/allzz/'
+const urlCity = `http://localhost:3010/cities/city`;
+const test = 'http://localhost:3010/tree/allzz/';
 
 /**jstree
  * Codigo para plantar el arbol
@@ -27,70 +27,64 @@ $(function () {
       }
     },
     "plugins": ["contextmenu"],
-    /* "contextmenu": {
-      "items": function ($node, data) {
-        var tree = $("#jstree").jstree(true);
-        return {
-          "Create": {
-            "separator_before": false,
-            "separator_after": false,
-            "label": "Crear",
-            "action": function (obj) {
-              var parent = '19'
-              $node = tree.create_node(parent, $node, 'first',console.log($node) );
-              tree.edit($node);
-              console.log($node)
-            }
-          },
-          "Rename": {
-            "separator_before": false,
-            "separator_after": true,
-            "label": "Renombrar",
-            "action": function (obj) {
-              tree.edit($node);
-
-            }
-          },
-          "Remove": {
-            "separator_before": false,
-            "separator_after": false,
-            "label": "Borrar",
-            "action": function (obj) {
-              tree.delete_node($node);
-            }
-          }
-        };
-      }
-    } */
 
   })
     //callback para cada opcion del menu desplegable
     .on('create_node.jstree', function (e, data) {
-      //TODO, como saber si es la ruta para country, ciudad o city => ¿guardar regiones en localstorage y poner un if?
+      //node.parents es un array con el id de elemento y todos los
+      //parentID del arbol
+      const parents = data.node.parents
+
+      var urlJStree
+      if (parents.length == 1) {
+        urlJStree = urlRegion
+      } else if (parents.length == 2) {
+        urlJStree = urlCountry
+      } else if (parents.length == 3) {
+        urlJStree = urlCity
+      }
       const newNode = { parent: data.parent, name: data.node.text }
-      fetchdata(urlCountry, 'POST', newNode)
+      fetchdata(urlJStree, 'POST', newNode)
         .then((res) => {
           const node = { name: data.node.text };
-          console.log('res data.node ', data.node);
+          console.log('res create data.node ', data.node);
+
         })
         .catch((err) => {
+          //console.log('error create data.node.parents length', parents.length)
           console.log('error ', err)
         })
+
 
     })
     .on('rename_node.jstree', function (e, data) {
 
       //name: node.original.text, es el nombre que estoy cambiando (ver parametors de la ruta)
-      // newName: data.node.text es el nombre que paso para cambiar el nombre del nodo.
-      //TODO si el parent en # uso una ruta, sino...Bontones CRUD  de region en el header
+      //newName: data.node.text es el nombre que paso para cambiar el nombre del nodo.
       const node = { parent: data.node.parent, name: data.node.original.text, newName: data.node.text }
-      console.log('node inicial', node)
-      fetchdata(urlCountry, 'PUT', node)
+
+      const parents = data.node.parents
+
+      var urlJStree
+      if (parents.length == 1) {
+        urlJStree = urlRegion
+      } else if (parents.length == 2) {
+        urlJStree = urlCountry
+      } else if (parents.length == 3) {
+        urlJStree = urlCity
+      }
+      //console.log('data.node rename ', data.node)
+      fetchdata(urlJStree, 'PUT', node)
         .then((res) => {
-          console.log('res rename2', data.node)
+          //console.log('urlTarget ', urlTarget)
+          console.log('res rename data.node', data.node)
+        })
+        .then((res) => {
+          //recarga el node. Sirva para evitar errores de creacion de childrens
+          $('#jstree').jstree(true).refresh();
         })
         .catch((err) => {
-          console.log('error rename ', err)
+          console.log('error ', err)
         })
 
 
@@ -98,7 +92,18 @@ $(function () {
     .on('delete_node.jstree', function (e, data) {
       const node = { name: data.node.text }
       //console.log('res delete', data.node)
-      fetchdata(urlCountry, 'DELETE', node)
+
+      const parents = data.node.parents
+
+      var urlJStree
+      if (parents.length == 1) {
+        urlJStree = urlRegion
+      } else if (parents.length == 2) {
+        urlJStree = urlCountry
+      } else if (parents.length == 3) {
+        urlJStree = urlCity
+      }
+      fetchdata(urlJStree, 'DELETE', node)
         .then((res) => {
           console.log(`Delete ${data.node.text} Complete`)
         })
@@ -112,11 +117,14 @@ $(function () {
 
   // 7 bind to events triggered on the tree
   $('#jstree').on("changed.jstree", function (e, data) {
-    console.log('changed.jstre  data.node.parent  ', data.node);
-    //Buscar en varias tablas si es verdadero, guardo eso como parametro en una variables
-    // if (busco en regiones) true guardo false, sigo con otro if
+    console.log('changed.jstre  data.node  ', data.node);
 
   });
+  // Se carga todo el Arbol con los nodos abiertos
+  $('#jstree').on('ready.jstree', function () {
+    $("#jstree").jstree("open_all");
+  });
+
   // 8 interact with the tree - either way is OK
   $('button').on('click', function () {
     $('#jstree').jstree(true).select_node('child_node_1');

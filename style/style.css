@@ -13,8 +13,10 @@ h2 {
       -ms-flex-pack: center;
           justify-content: center;
   z-index: 100;
-  width: 75vw;
-  height: 75vw;
+  left: 5vw;
+  top: 5vw;
+  width: 700px;
+  height: 250px;
   background-color: #f5a3a3;
   border: 1px black;
 }

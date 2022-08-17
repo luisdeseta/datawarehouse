@@ -12,33 +12,34 @@ const expJWT = expressJwt({ secret: process.env.SECRET_TOKEN, algorithms: ['HS51
 
 //creacion del modelo de usuario (sequelize)
 const User = sequelize.define("users", {
-        first_name: DataTypes.TEXT,
-        last_name: DataTypes.TEXT,
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-                validate:{
-                    isEmail:{msg: "Revise el formato del email"},
-                    notNull:{msg: "el email no puede ser null"}
-                        }},
-        password: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-            validate:{
-                notNull: {msg: "password no puede ser null"}
-            }
-        },
-        profile:{
-            type: DataTypes.TEXT,
-            allowNull: true,
+    first_name: DataTypes.TEXT,
+    last_name: DataTypes.TEXT,
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            isEmail: { msg: "Revise el formato del email" },
+            notNull: { msg: "el email no puede ser null" }
         }
     },
-{ timestamps: false,}
+    password: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+            notNull: { msg: "password no puede ser null" }
+        }
+    },
+    profile: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    }
+},
+    { timestamps: false, }
 )
 
 //Crear el usuario admin
 //TODO poner un IF para no crear infinitos admin
-router.post('/createadmin', async (req, res) =>{
+router.post('/createadmin', async (req, res) => {
     try {
         const salt = await bcrypt.genSalt(10);
         const admin = await User.create({
@@ -46,9 +47,9 @@ router.post('/createadmin', async (req, res) =>{
             last_name: 'admin',
             email: 'admin@email.com.ar',
             password: await bcrypt.hash('admin123', salt),
-            profile:'A'
+            profile: 'A'
         })
-        res.json({Mensaje: `Usuario ${admin.email} creado con éxito`});
+        res.json({ Mensaje: `Usuario ${admin.email} creado con éxito` });
 
     } catch (error) {
         res.json(`Èrror ${error}`);
@@ -58,32 +59,33 @@ router.post('/createadmin', async (req, res) =>{
 })
 
 //login de usuarios
-router.post('/user/login', async (req, res) =>{
+router.post('/user/login', async (req, res) => {
     //busco por email
     const userLogin = await User.findAll({
-        where:{  [Op.or]: [{email : req.body.usuario}, {first_name : req.body.usuario}]
+        where: {
+            [Op.or]: [{ email: req.body.usuario }, { first_name: req.body.usuario }]
         }
-      
-      });
-      console.log("userLogin " + userLogin[0].password)
-    if (userLogin == 0) return res.status(400).json({Mensaje: "Email o password incorrecto!!"});
+
+    });
+    console.log("userLogin " + userLogin[0].password)
+    if (userLogin == 0) return res.status(400).json({ Mensaje: "Email o password incorrecto!!" });
     //Valido pass
     const userPass = await bcrypt.compare(req.body.pass, userLogin[0].password);
-    if (!userPass) return res.status(400).json({Mensaje: "Email o password incorrecto!!"});
+    if (!userPass) return res.status(400).json({ Mensaje: "Email o password incorrecto!!" });
     console.log('userPass ' + userPass);
     //Creo el token con jwt
     const token = jwt.sign({
         email: userLogin[0].email,
         password: userLogin[0].password,
         profile: userLogin[0].profile
-    },process.env.SECRET_TOKEN,
-    {algorithm: 'HS512' });
+    }, process.env.SECRET_TOKEN,
+        { algorithm: 'HS512' });
 
-    res.status(200).json({token});
+    res.status(200).json({ token });
     //res.header('Authorization', token).json({token});
 })//end login
 
-router.get('/testing', expJWT, async (req, res) =>{
+router.get('/testing', expJWT, async (req, res) => {
     const token = req.header('Authorization');
     console.log(token);
     res.status(200).json(token);
@@ -92,15 +94,8 @@ router.get('/testing', expJWT, async (req, res) =>{
 //USUARIOS: Son las personas que usan el sistema
 
 //Crear usuario nuevo
-router.post('/user/', async (req, res) =>{
-    /* //validar si es admin o configuarar ruta exclusiva
-    console.log("user role  " + req.user.profile)
-    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"})
-    //valido si email existe en base de datos
-    const validEmail = await sequelize.query(`SELECT * from users 
-    WHERE email ='${req.body.email}' 
-    `, {type: sequelize.QueryTypes.SELECT})
-    if (validEmail.length != 0 ) return res.status('403').json({mensaje: "ya existe ese email"})  */
+router.post('/user/', async (req, res) => {
+    /* la validación la hace el middleware  */
     try {
         //HASH password
         const saltos = await bcrypt.genSalt(10);
@@ -113,44 +108,41 @@ router.post('/user/', async (req, res) =>{
             password: pass,
             profile: req.body.profile
         })
-        res.status(200).json({Mensaje: `Usuario creado con éxito`, newUser});
-        
+        res.status(200).json({ Mensaje: `Usuario creado con éxito`, newUser });
+
     } catch (error) {
-        res.status(400).json({Mensaje: "no se pudo crear el usuario", Error: error})
+        res.status(400).json({ Mensaje: "no se pudo crear el usuario", Error: error })
     }
 })
 
 //Consultar usuarios
 router.get('/user/:email', async (req, res) => {
-    /* console.log("user role  ", req.user.profile)
-    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}) */
+
     try {
-       const {email} = req.params;
-       const users = await User.findAll({
-        where: { email:{[Op.like]: `%${email}%`} }
-    });
-    res.status(200).json({users}) 
-    console.log(users);
+        const { email } = req.params;
+        const users = await User.findAll({
+            where: { email: { [Op.like]: `%${email}%` } }
+        });
+        res.status(200).json({ users })
+        console.log(users);
 
     } catch (error) {
-        res.status(400).json({Status: "Error en la sentencia SQL"})
+        res.status(400).json({ Status: "Error en la sentencia SQL" })
     }
 })
 
 
 
-router.get('/user/all', async (req, res) => {
-    /* console.log("user role  ", req.user.profile)
-    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}) */
+router.get('/allusers', async (req, res) => {
+
     try {
         const users = await User.findAll({
-            
         });
-        res.status(200).json({users}) 
+        res.status(200).json({ users })
         console.log(users);
 
     } catch (error) {
-        res.status(400).json({Status: "Error en la sentencia SQL"})
+        res.status(400).json({ Status: "Error en la sentencia SQL" })
     }
 })
 
@@ -161,26 +153,26 @@ router.delete('/user/:id', async (req, res) => {
     if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}) */
     //
     try {
-        const {id} = req.params
+        const { id } = req.params
         const deleteUser = await User.destroy({
-            where: {id: id}
+            where: { id: id }
         });
-        if ( deleteUser === 0){
-            res.status(404).json({Status: "Usuario no encontrado"})
-        }else{
-            res.status(200).json({Status: `Usuario borrado!`}) 
+        if (deleteUser === 0) {
+            res.status(404).json({ Status: "Usuario no encontrado" })
+        } else {
+            res.status(200).json({ Status: `Usuario borrado!` })
 
         }
     } catch (error) {
-        res.status(401).json({Status: "Error en la sentencia SQL", error})
+        res.status(401).json({ Status: "Error en la sentencia SQL", error })
     }
 
 })
 
 //Actualizar usuario
 router.put('/user', async (req, res) => {
-/*     console.log("user role  " + req.user.profile)
-    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}); */
+    /*     console.log("user role  " + req.user.profile)
+        if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}); */
     //TODO primero buscar y luego actualizar
     try {
         const userUpdate = await sequelize.query(`
@@ -189,22 +181,23 @@ router.put('/user', async (req, res) => {
         WHERE email = :_email
         `, {
             type: QueryTypes.UPDATE,
-            replacements:{
-                _first_name: req.body.first_name || undefined, 
-                _last_name: req.body.last_name || undefined, 
-                _email: req.body.email || undefined, 
-                _password: await bcrypt.hash(req.body.password, await bcrypt.genSalt(10)), 
+            replacements: {
+                _first_name: req.body.first_name || undefined,
+                _last_name: req.body.last_name || undefined,
+                _email: req.body.email || undefined,
+                _password: await bcrypt.hash(req.body.password, await bcrypt.genSalt(10)),
                 _profile: req.body.profile || undefined
             }
         })
         console.log("userUpdate ", userUpdate)
         res.status(200).json({
-            Status: "Usuario Actualizado con éxito"});
+            Status: "Usuario Actualizado con éxito"
+        });
 
     } catch (error) {
-        res.status(401).json({Status: "Error en la sentencia SQL"})
+        res.status(401).json({ Status: "Error en la sentencia SQL" })
     }
 })
 //Exports
-module.exports = {router, User}
+module.exports = { router, User }
 
