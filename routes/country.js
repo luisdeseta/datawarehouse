@@ -5,8 +5,8 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const sequelize = require('../services/conection');
 const { Sequelize, DataTypes, Model, QueryTypes, Op } = require('sequelize');
-const expressJwt = require('express-jwt');
 const req = require('express/lib/request');
+const expressJwt = require('express-jwt');
 
 // CRUD de paises
 const Country = sequelize.define("countries", {

@@ -26,6 +26,9 @@
     </ul>
 </header>
 <body>
+  <h2>
+    Lista de Usuarios
+</h2>
     <div id="test">
 
       <!--Inicio formulario de busqueda de usuarios-->
@@ -35,8 +38,9 @@
         <input type="text" class="form-control" id="name" placeholder="ingrese nombre o email para buscar" required>
 
      
-      <div class="col-12">
+      <div class="col-12 btnZ">
       <button type="submit" class="btn btn-primary" id="searchUserbtn" >Buscar</button>
+      <button type="submit" class="btn btn-primary" id="newUserbtn" >Agregar Usuario</button>
       </div>
     </div>
       <!--Fin formulario de busqueda de usuarios-->
@@ -52,8 +56,8 @@
             <th scope="col">Apellido</th>
             <th scope="col">Email</th>
             <th scope="col">Profile</th>
-            <th scope="col">Act</th>
-            <th scope="col">Del</th>
+            <th scope="col">Actualizar</th>
+            <th scope="col">Borrar</th>
             
           </tr>
         </thead>
@@ -77,6 +81,10 @@
       
         <div class="col g-4" id="formUserupdate" >
           <div class="col-md-4">
+            <label for="id" class="form-label">ID</label>
+            <input type="text" class="form-control" id="id" placeholder="id" autocomplete="off" required disabled>
+          </div>
+          <div class="col-md-4">
             <label for="name" class="form-label">Nombre</label>
             <input type="text" class="form-control" id="nameForm" placeholder="Nombre de usuario" autocomplete="off" required>
           </div>
@@ -92,6 +100,7 @@
             <label for="profile" class="form-label">Perfil</label>
             <input type="text" class="form-control" id="profile" placeholder="A = Admin; U = Usuario" autocomplete="off" required>
           </div>
+          
           <div class="col-md-4">
             <label for="inputPassword" class="form-label">Password</label>
             <input type="password" class="form-control" id="inputPassword">

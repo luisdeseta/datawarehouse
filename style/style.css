@@ -2,8 +2,16 @@
   margin: 15px;
 }
 
+#test {
+  margin: 15px;
+}
+
 h2 {
   margin: 15px;
+}
+
+.btnZ {
+  padding: 5px 0px;
 }
 
 #formContainer {
@@ -16,7 +24,7 @@ h2 {
   left: 5vw;
   top: 5vw;
   width: 700px;
-  height: 250px;
+  height: 290px;
   background-color: #f5a3a3;
   border: 1px black;
 }
@@ -44,6 +52,72 @@ h2 {
   -webkit-box-pack: right;
       -ms-flex-pack: right;
           justify-content: right;
+}
+
+#ciaFormContainer {
+  display: none;
+  position: fixed;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  z-index: 100;
+  left: 5vw;
+  top: 5vw;
+  width: 700px;
+  height: 290px;
+  background-color: #f5a3a3;
+  border: 1px black;
+}
+
+#ciaFormContainer #formCiaupdate {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-line-pack: start;
+      align-content: flex-start;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  padding: 5px 5px;
+}
+
+#createCiaFormContainer {
+  margin: 15px;
+}
+
+#formCia {
+  margin: 15px;
+}
+
+#regionFormContainer {
+  display: none;
+  position: fixed;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  z-index: 100;
+  left: 5vw;
+  top: 5vw;
+  width: 700px;
+  height: 290px;
+  background-color: #f5a3a3;
+  border: 1px black;
+}
+
+#regionFormContainer #newRegionx {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-line-pack: start;
+      align-content: flex-start;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  padding: 5px 5px;
 }
 
 #10:hover {

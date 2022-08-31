@@ -8,7 +8,7 @@ const { Sequelize, DataTypes, Model, QueryTypes, Op } = require('sequelize');
 const expressJwt = require('express-jwt');
 const req = require('express/lib/request');
 
-// CRUD de paises
+// Creacion del modelo de ciudades
 const City = sequelize.define("cities", {
     country_id: {
         type: DataTypes.TEXT,
@@ -53,7 +53,7 @@ city_route.get('/city/:city', async (req, res) => {
     try {
         const { city } = req.params;
         const queryCity = await City.findAll({
-            where: { name: { [Op.like]: `%${city}%` } }
+            where: { [Op.or]: [{ id: { [Op.like]: `%${city}%` } }, { name: { [Op.like]: `%${city}%` } }] }
         })
         console.log(queryCity)
         if (queryCity.length == 0) return res.status('403').json({ mensaje: `${City} no existe` })
@@ -68,6 +68,9 @@ city_route.get('/city/:city', async (req, res) => {
         console.log("el error ", error)
     }
 })
+
+//Filtrar ciudad por país
+
 
 city_route.put('/city', async (req, res) => {
     //verificar token

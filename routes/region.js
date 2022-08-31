@@ -10,8 +10,6 @@ const req = require('express/lib/request');
 const expJWT = expressJwt({ secret: process.env.SECRET_TOKEN, algorithms: ['HS512'] });
 
 
-// Aqui gestiono todas las rutas de: Region, pais y ciudad
-
 //Modelo regiones (sequelize)
 const Region = sequelize.define("regions", {
     name: {
@@ -52,15 +50,16 @@ region_route.post('/regionzz/:id/:parent/:text', async (req, res) => {
 region_route.post('/region', async (req, res) => {
     //verificar el token
     //Verifica si la region ya existe
-    /* const verifyRegion = await Region.findAll({
-        where: { name: req.body.name } 
+    const verifyRegion = await Region.findAll({
+        where: { name: req.body.name }
     })
-    if (verifyRegion.length != 0) return res.status('403').json({ mensaje: `${req.body.regionName} ya existe` }) */
+    console.log(verifyRegion)
+    if (verifyRegion.length != 0) return res.status('403').json({ mensaje: `${verifyRegion[0].dataValues.name} ya existe` })
     try {
         const region = await Region.create({
             name: req.body.name
         })
-        res.json({ Mensaje: `Region ${req.body.name} creado con éxito` });
+        res.json({ Mensaje: `Region ${region.name} creado con éxito` });
 
     } catch (error) {
         res.json({ Error: error })

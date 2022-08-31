@@ -43,10 +43,13 @@
   <body>
     <div id="regionTitle" class="regionTitle">
       <h2>Regiones, Países y Ciudades</h2>
-      <h6>clic derecho para más opciones</h6>
-      <button id="addRegionBTN" class="btn btn-success btn-sm">
-        agregar Región
-      </button>
+      <h6>click derecho sobre el elemento para más opciones</h6>
+      <div class="btnZ" id="addRegion">
+        <button id="addRegionBTN" class="btn btn-success btn-sm">
+          agregar Región
+        </button>
+
+      </div>
     </div>
     <!-- 
     <button class="btn btn-primary btn-sm" >editar</button> <button class="btn btn-danger btn-sm">eliminar</button><button class="btn btn-success btn-sm">agregar ciudad</button> 
@@ -64,7 +67,21 @@
         <li>Root node 2</li>
       </ul>
     </div>
+<div class="regionFormContainer" id="regionFormContainer">
+ 
+    <div class="col g-4" id="newRegionx" >
+      <div class="col-md-14">
+        <label for="regionName" class="form-label">Nombre de la nueva región </label>
+        <input type="text" class="form-control" id="regionName" placeholder="Nombre de la nueva region" autocomplete="off">
+        <div class="col-12" id="btnContainer">
+          <button type="submit" class="btn btn-primary" id="cancelRegionBtn" >Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="createRegionBtn" >Crear</button>
+        </div>
+      </div>
 
+  
+
+</div>
     <!--jstree script-->
   <!-- 4 include the jQuery library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>

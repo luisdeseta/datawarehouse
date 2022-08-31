@@ -1,8 +1,12 @@
 import { fetchdata, getdata, deldata, getD } from '../routes/fetchdata.js';
 //constantes
-const testBTN = document.querySelector('#addRegionBTN')
+const addREGIONBTN = document.querySelector('#addRegionBTN')
+const NEWREGION = document.querySelector('#regionName');
+const CREATEREGIONBTN = document.querySelector('#createRegionBtn')
+const REGIONMODAL = document.querySelector('#regionFormContainer');
+const CANCELBTN = document.querySelector('#cancelRegionBtn');
 //URL para fetch
-const urlRegion = `http://localhost:3010/geo/region/`;
+const urlRegion = `http://localhost:3010/geo/region`;
 const urlCountry = `http://localhost:3010/country/country`;
 const urlCity = `http://localhost:3010/cities/city`;
 const test = 'http://localhost:3010/tree/allzz/';
@@ -10,7 +14,6 @@ const test = 'http://localhost:3010/tree/allzz/';
 /**jstree
  * Codigo para plantar el arbol
  */
-
 
 $(function () {
   // 6 create an instance when the DOM is ready
@@ -136,7 +139,6 @@ $(function () {
 /**
  * Consulta de base de datos
  */
-
 const regionTree = () => {
 
   getD(test, 'GET')
@@ -151,7 +153,34 @@ const regionTree = () => {
       console.log("error", err)
     })
 }
+/**
+ * Crear nueva región
+ */
+const newRegions = () => {
+  const data = {
+    name: NEWREGION.value
+  }
+  fetchdata(urlRegion, "POST", data)
+    .then((res) => {
+      console.log(res)
+      REGIONMODAL.style.display = "none"
+      $('#jstree').jstree(true).refresh();
 
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 
+}
+/**
+ * Cierra el modal sin guardar los cambios
+ */
+const cancelBTN = () => {
+  //alert("boton cerrar");
+  REGIONMODAL.style.display = "none";
+}
 
-testBTN.addEventListener('click', regionTree)
+//testBTN.addEventListener('click', regionTree)
+CREATEREGIONBTN.addEventListener('click', newRegions)
+CANCELBTN.addEventListener('click', cancelBTN)
+addREGIONBTN.addEventListener('click', () => { REGIONMODAL.style.display = "flex" })

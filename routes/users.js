@@ -116,15 +116,19 @@ router.post('/user/', async (req, res) => {
 })
 
 //Consultar usuarios
-router.get('/user/:email', async (req, res) => {
+router.get('/user/:nameSearch', async (req, res) => {
 
     try {
-        const { email } = req.params;
+        const { nameSearch } = req.params;
+        //busqueda por nombre o por email
         const users = await User.findAll({
-            where: { email: { [Op.like]: `%${email}%` } }
+            where: {
+                [Op.or]: [{ first_name: { [Op.like]: `%${nameSearch}%` } },
+                { email: { [Op.like]: `%${nameSearch}%` } }]
+            }
         });
         res.status(200).json({ users })
-        console.log(users);
+        console.log("get User ", users);
 
     } catch (error) {
         res.status(400).json({ Status: "Error en la sentencia SQL" })
@@ -149,9 +153,7 @@ router.get('/allusers', async (req, res) => {
 
 //Borrar usuario
 router.delete('/user/:id', async (req, res) => {
-    /* console.log("user role  " + req.user.profile)
-    if (req.user.profile != "A") return res.status(401).json({Status: "acceso denegado"}) */
-    //
+
     try {
         const { id } = req.params
         const deleteUser = await User.destroy({
@@ -177,11 +179,13 @@ router.put('/user', async (req, res) => {
     try {
         const userUpdate = await sequelize.query(`
         UPDATE users set first_name = :_first_name, last_name = :_last_name, 
-        email = :_email, password = :_password, profile = :_profile
-        WHERE email = :_email
+        email = :_email, password = :_password, profile = :_profile,
+        id = :_id
+        WHERE id = :_id
         `, {
             type: QueryTypes.UPDATE,
             replacements: {
+                _id: req.body.id,
                 _first_name: req.body.first_name || undefined,
                 _last_name: req.body.last_name || undefined,
                 _email: req.body.email || undefined,

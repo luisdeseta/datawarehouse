@@ -20,7 +20,8 @@ const { router, User } = require('./routes/users');
 const { region_route, Region } = require('./routes/region');
 const { country_route, Country } = require('./routes/country');
 const { city_route, City } = require('./routes/city');
-const { route_tree } = require('./routes/jstree')
+const { route_tree } = require('./routes/jstree');
+const { cia_route, Company } = require('./routes/company');
 
 //Middlewares
 const { isAdmin, validateToken, validateLogin } = require('./services/middleware')
@@ -32,6 +33,7 @@ app.use('/geo', region_route);
 app.use('/country', country_route);
 app.use('/cities', city_route);
 app.use('/tree', route_tree);
+app.use('/company', cia_route)
 
 //Test
 app.get('/', (req, res) => {
