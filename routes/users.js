@@ -67,12 +67,12 @@ router.post('/user/login', async (req, res) => {
         }
 
     });
-    console.log("userLogin " + userLogin[0].password)
-    if (userLogin == 0) return res.status(400).json({ Mensaje: "Email o password incorrecto!!" });
+    console.log("userLogin ", userLogin)
+    if (userLogin == 0) return res.status(400).json({ Mensaje: "Email o password incorrecto!" });
     //Valido pass
     const userPass = await bcrypt.compare(req.body.pass, userLogin[0].password);
-    if (!userPass) return res.status(400).json({ Mensaje: "Email o password incorrecto!!" });
-    console.log('userPass ' + userPass);
+    if (!userPass) return res.status(400).json({ Mensaje: "Email o password incorrecto!!!" });
+    console.log('userPass ', userPass);
     //Creo el token con jwt
     const token = jwt.sign({
         email: userLogin[0].email,
@@ -95,7 +95,17 @@ router.get('/testing', expJWT, async (req, res) => {
 
 //Crear usuario nuevo
 router.post('/user/', async (req, res) => {
-    /* la validación la hace el middleware  */
+    //VErificar si usuario ya existe
+    const userLogin = await User.findAll({
+        where: {
+            [Op.or]: [{ email: req.body.email }]
+        }
+
+    });
+    //res.send("userLogin", userLogin)
+    console.log("userLogin ", userLogin)
+    if (userLogin != 0) return res.status(400).json({ Mensaje: "Usuario ya existe" });
+
     try {
         //HASH password
         const saltos = await bcrypt.genSalt(10);

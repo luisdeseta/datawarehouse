@@ -114,14 +114,14 @@ country_route.delete('/country', async (req, res) => {
 })
 //get all countries
 country_route.get('/countries', async (req, res) => {
-    //verificar el token
+
     try {
-        const queryCountry = await Country.findAll({
-            attributes: ['name'],
+        const query = await Country.findAll({
+            //attributes: ['name'],
         })
-        console.log(queryCountry)
-        if (queryCountry.length == 0) return res.status('403').json({ mensaje: `${country} no existe` })
-        res.status(200).send(queryCountry)
+        console.log(query)
+        if (query.length == 0) return res.status('403').json({ mensaje: `${Country} no existe` })
+        res.status(200).json({ query })
 
 
     } catch (error) {

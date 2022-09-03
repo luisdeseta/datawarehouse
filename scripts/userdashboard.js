@@ -1,4 +1,4 @@
-import { fetchdata } from '../routes/fetchdata.js';
+import { fetchdata, getdata } from '../routes/fetchdata.js';
 
 
 //constantes
@@ -7,15 +7,18 @@ const LASTNAME = document.querySelector('#lastName');
 const EMAIL = document.querySelector('#emailInput');
 const PROFILE = document.querySelector('#profile');
 const PASS = document.querySelector('#inputPassword');
+const confirmPASS = document.querySelector('#inputPassword2');
+const ERRORPASS = document.querySelector('#errorPass')
 const USERBTN = document.querySelector('#createUserbtn');
+const userERROR = document.querySelector('#userError');
 
-const urlUSER = `http://localhost:3010/api/user`;
+const urlUSER = `http://localhost:3010/api/user/`;
 
 /**
  * Crea un usuario del sistema, solo un admin
- * TODO, VALIDAR QUE EL USUARIO EXISTE PARA NO CREAR DUPLICADOS.
+ * Usurios duplicados se verifican el el backend
  */
-const create = () =>{
+const create = () => {
     const data = {
         first_name: NAME.value,
         last_name: LASTNAME.value,
@@ -23,16 +26,19 @@ const create = () =>{
         password: PASS.value,
         profile: PROFILE.value
     }
-    
-    //console.log('create => '+data)
+    if (PASS.value != confirmPASS.value) return ERRORPASS.innerHTML = `<h6>El password no coincide </h6>`
     fetchdata(urlUSER, "POST", data)
-    .then((res)=>{
-        console.log("creatUser res => ", res)
+        .then((res) => {
+            //console.log("creatUser res => ", res.Mensaje)
+            if (res.Mensaje == "Usuario ya existe") return userERROR.innerHTML = `<h6> Usuario ya existe</h6>`
+            alert(`Usuario ${res.newUser.email} creado con éxito!!`)
+            window.location.href = '../pages/userslist.html';
 
-    })
-    .catch((err)=>{
-        console.log('error =>', err)
-    })
+
+        })
+        .catch((err) => {
+            console.log('error =>', err)
+        })
 }
 
 

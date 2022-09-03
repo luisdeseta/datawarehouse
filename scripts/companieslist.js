@@ -23,6 +23,7 @@ const CIAFORM = document.querySelector('#theCiaForm')
 //url fetch
 const urlCIA = 'http://localhost:3010/company/cia/'
 const urlAllCia = 'http://localhost:3010/company/cia/companies'
+const urlALLCITY = 'http://localhost:3010/cities/city'
 //Buscar cía
 const searchCia = (url, search = "") => {
     //
@@ -30,7 +31,7 @@ const searchCia = (url, search = "") => {
     getdata(url, 'GET', search)
         .then((res) => {
             //const {data} = res;
-            //console.log("res ", res)
+            //console.log("res getdata searchCia", res)
             let element = "";
             for (let i = 0; i < res.queryCia.length; i++) {
                 array.push(res.queryCia[i]);

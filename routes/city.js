@@ -69,7 +69,65 @@ city_route.get('/city/:city', async (req, res) => {
     }
 })
 
-//Filtrar ciudad por país
+/**
+ * Devuelve el listado de todas las ciudades
+ */
+city_route.get('/city/', async (req, res) => {
+    //verificar el token
+    try {
+        const { city } = req.params;
+        const query = await City.findAll({
+            //where: { [Op.or]: [{ id: { [Op.like]: `%${city}%` } }, { name: { [Op.like]: `%${city}%` } }] }
+        })
+        console.log(query)
+        if (query.length == 0) return res.status('403').json({ mensaje: `${City} no existe` })
+        res.status(200).json({
+            query
+        })
+
+
+    } catch (error) {
+        res.json({ Error: error })
+        console.log("el error ", error)
+    }
+})
+
+/**
+ * FILTRAR CIUDAD POR PAIS
+ * Elijo un pais y filtra las ciudades para el 
+ * pop up en el form de crear empresa
+ *  */
+
+//importo los modelos
+const { Country } = require('../routes/country');
+//armo las relaciones entre modelos
+Country.hasMany(City, {
+    foreignKey: 'country_id'
+});
+City.belongsTo(Country, {
+    foreignKey: 'country_id'
+})
+//Ruta para buscar ciudades por pais
+city_route.get('/citybycountry/:country', async (req, res) => {
+    try {
+        const { country } = req.params;
+        const query = await City.findAll({
+            where: { country_id: [`${country}`] },
+            //attributes: ['name']
+        })
+        console.log(query)
+        if (query.length == 0) return res.status('403').json({ mensaje: `${City} no existe` })
+        res.status(200).json({
+            query
+        })
+
+
+    } catch (error) {
+        res.json({ Error: error })
+        console.log("el error ", error)
+    }
+})
+
 
 
 city_route.put('/city', async (req, res) => {

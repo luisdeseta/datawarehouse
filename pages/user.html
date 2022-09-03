@@ -15,10 +15,10 @@
         <a class="nav-link active" aria-current="page" href="#">Contactos</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="./pages/login.html">Usuarios</a>
+        <a class="nav-link active" aria-current="page" href="./userslist.html">Usuarios</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Compañías</a>
+        <a class="nav-link active" aria-current="page" href="./companieslist.html">Compañías</a>
       </li>
       <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="./regions.html">Región / Ciuadad</a>
@@ -43,6 +43,9 @@
         <label for="emailInput" class="form-label">Email</label>
         <input type="email" class="form-control" id="emailInput" placeholder="nombre@example.com"> 
       </div>
+      <div class="col-md-4 error" id="userError">
+
+      </div>
       <div class="col-md-4">
         <label for="profile" class="form-label">Perfil</label>
         <input type="text" class="form-control" id="profile" placeholder="A = Admin; U = Usuario" required>
@@ -55,7 +58,9 @@
         <label for="inputPassword2" class="form-label">Repetir Password</label>
         <input type="password" class="form-control" id="inputPassword2">
       </div>
-      <div class="col-md-4"></div>
+      <div class="col-md-4 error" id="errorPass" >
+
+      </div>
       <div class="col-md-4"></div>
      
       <div class="col-12">

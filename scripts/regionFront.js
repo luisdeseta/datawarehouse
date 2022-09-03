@@ -31,6 +31,7 @@ $(function () {
     },
     "plugins": ["contextmenu"],
 
+
   })
     //callback para cada opcion del menu desplegable
     .on('create_node.jstree', function (e, data) {

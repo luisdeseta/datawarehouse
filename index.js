@@ -24,16 +24,16 @@ const { route_tree } = require('./routes/jstree');
 const { cia_route, Company } = require('./routes/company');
 
 //Middlewares
-const { isAdmin, validateToken, validateLogin } = require('./services/middleware')
+const { isAdmin, validateToken, validateLogin, isUser } = require('./services/middleware')
 //Rutas
 app.use(cors());
 app.use('/admin', auth);
 app.use('/api', validateToken, isAdmin, router);
-app.use('/geo', region_route);
-app.use('/country', country_route);
-app.use('/cities', city_route);
+app.use('/geo', validateToken, isUser, region_route);
+app.use('/country', validateToken, isUser, country_route);
+app.use('/cities', validateToken, isUser, city_route);
 app.use('/tree', route_tree);
-app.use('/company', cia_route)
+app.use('/company', validateToken, isUser, cia_route)
 
 //Test
 app.get('/', (req, res) => {

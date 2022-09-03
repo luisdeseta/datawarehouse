@@ -24,7 +24,7 @@ h2 {
   left: 5vw;
   top: 5vw;
   width: 700px;
-  height: 290px;
+  height: 370px;
   background-color: #f5a3a3;
   border: 1px black;
 }
@@ -118,6 +118,11 @@ h2 {
       -ms-flex-pack: left;
           justify-content: left;
   padding: 5px 5px;
+}
+
+.error {
+  color: red;
+  font-style: italic;
 }
 
 #10:hover {

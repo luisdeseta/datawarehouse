@@ -14,6 +14,8 @@ const LASTNAME = document.querySelector('#lastName');
 const EMAIL = document.querySelector('#emailInput');
 const PROFILE = document.querySelector('#profile');
 const PASS = document.querySelector('#inputPassword');
+const confirmPASS = document.querySelector('#inputPassword2');
+const ERRORPASS = document.querySelector('#errorPass')
 const testMark = document.querySelector('#testMark');
 const UPDATEBT = document.querySelector('#updateUserbtn');
 const CANCELBTN = document.querySelector('#cancelUserbtn');
@@ -143,6 +145,9 @@ const setValueUser = (order, id, name, last, email, profile) => {
  */
 const updateUser = () => {
     event.preventDefault()
+    //Verifico que pass sea igual a confirmpass
+    if (PASS.value == "") return ERRORPASS.innerHTML = `<h6>Completar el campo Password </h6>`
+    if (PASS.value != confirmPASS.value) return ERRORPASS.innerHTML = `<h6>El password no coincide </h6>`
     const data = {
         id: ID.value,
         first_name: NAMEUPDATE.value,

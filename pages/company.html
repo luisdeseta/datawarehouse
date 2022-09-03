@@ -15,10 +15,10 @@
         <a class="nav-link active" aria-current="page" href="#">Contactos</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="./pages/login.html">Usuarios</a>
+        <a class="nav-link active" aria-current="page" href="./userslist.html">Usuarios</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Compañías</a>
+        <a class="nav-link active" aria-current="page" href="./companieslist.html">Compañías</a>
       </li>
       <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="./regions.html">Región / Ciuadad</a>
@@ -41,13 +41,23 @@
             <label for="ciaNameForm" class="form-label">Nombre</label>
             <input type="text" class="form-control" id="ciaNameForm" placeholder="Nombre de Compania" autocomplete="off" required>
           </div>
-<!--           <div class="col-md-4">
-            <label for="ciaCountry" class="form-label">País</label>
-            <input type="text" class="form-control" id="ciaCountry" placeholder="País" autocomplete="off" >
-          </div> -->
           <div class="col-md-4">
-            <label for="ciaCity" class="form-label">Ciudad</label>
-            <input type="text" class="form-control" id="ciaCity" placeholder="Ciudad" autocomplete="off" required>
+            <label for="ciaCountry" class="form-label">País</label>
+            <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example"  id="ciaCountry">
+              <option selected>Selecionar</option>
+              <option value="1">País 1</option>
+              <option value="2">País 2</option>
+              
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="citySelect" class="form-label">Ciudad</label>
+            <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example"  id="citySelect">
+              <option selected>Selecionar un país primero</option>
+              <option value="1">Ciudad 1</option>
+              <option value="2">Ciudad 2</option>
+              
+            </select>
           </div>
           <div class="col-md-4">
             <label for="ciaDirInput" class="form-label">Dirección</label>
