@@ -1,6 +1,6 @@
 import { fetchdata, getdata, deldata } from '../routes/fetchdata.js';
-import dotenv from '../node_modules/dotenv';
-dotenv.config();
+import { rutas } from '../scripts/rutas.js'
+
 //constantes
 const NAME = document.querySelector('#nameCia');
 const CIASEARCHBTN = document.querySelector('#searchCiabtn');
@@ -21,10 +21,15 @@ const CIAADDBTN = document.querySelector('#createCiabtn');
 const CANCELCIABTN = document.querySelector('#cancelCiarbtn');
 const CIAFORM = document.querySelector('#createCiaForm');
 //url fetch
+const urlCIA = rutas.urlCIA
+const urlALLCITY = rutas.urlALLCITY
+const urlCOUNRTY = rutas.urlCOUNRTY
+const urlCITYBYCOUNTRY = rutas.urlCITYBYCOUNTRY
+/* 
 const urlCIA = process.env.urlCIA
 const urlALLCITY = process.env.urlALLCITY
 const urlCOUNRTY = process.env.urlCOUNRTY
-const urlCITYBYCOUNTRY = process.env.urlCITYBYCOUNTRY
+const urlCITYBYCOUNTRY = process.env.urlCITYBYCOUNTRY */
 /**
  * Agrega una cía.
  */

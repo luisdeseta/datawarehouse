@@ -1,5 +1,5 @@
 import { fetchdata, getdata, deldata } from '../routes/fetchdata.js';
-
+import { rutas } from '../scripts/rutas.js'
 
 //Constantes
 const NAME = document.querySelector('#name');
@@ -21,8 +21,9 @@ const UPDATEBT = document.querySelector('#updateUserbtn');
 const CANCELBTN = document.querySelector('#cancelUserbtn');
 const FORM = document.querySelector('#theForm')
 //URL para fetch
-const urlUSER = `http://localhost:3010/api/user/`;
-const urlALL = `http://localhost:3010/api/allusers`;
+//const urlUSER = `http://localhost:3010/api/user/`;
+const urlUSER = rutas.urlUSER;
+const urlALL = rutas.urlALL;
 
 /**
  * busca usuarios 

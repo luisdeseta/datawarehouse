@@ -49,7 +49,7 @@ country_route.post('/country', async (req, res) => {
 })
 
 country_route.get('/country/:country', async (req, res) => {
-    //verificar el token
+
     try {
         const { country } = req.params;
         const queryCountry = await Country.findAll({
@@ -118,6 +118,9 @@ country_route.get('/countries', async (req, res) => {
     try {
         const query = await Country.findAll({
             //attributes: ['name'],
+            order: [
+                ["name", "ASC"]
+            ]
         })
         console.log(query)
         if (query.length == 0) return res.status('403').json({ mensaje: `${Country} no existe` })

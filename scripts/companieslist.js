@@ -1,4 +1,5 @@
 import { fetchdata, getdata, deldata } from '../routes/fetchdata.js';
+import { rutas } from '../scripts/rutas.js'
 
 //constantes
 const NAME = document.querySelector('#nameCia');
@@ -21,9 +22,9 @@ const CIAFORM = document.querySelector('#theCiaForm')
 //const CIACOUNTRY = document.querySelector('#ciaCountry');
 
 //url fetch
-const urlCIA = 'http://localhost:3010/company/cia/'
-const urlAllCia = 'http://localhost:3010/company/cia/companies'
-const urlALLCITY = 'http://localhost:3010/cities/city'
+const urlCIA = rutas.urlCIA
+const urlAllCia = rutas.urlAllCia
+const urlALLCITY = rutas.urlALLCITY
 //Buscar cía
 const searchCia = (url, search = "") => {
     //

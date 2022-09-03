@@ -1,4 +1,6 @@
 import { fetchdata, getdata, deldata, getD } from '../routes/fetchdata.js';
+import { rutas } from '../scripts/rutas.js'
+
 //constantes
 const addREGIONBTN = document.querySelector('#addRegionBTN')
 const NEWREGION = document.querySelector('#regionName');
@@ -6,10 +8,10 @@ const CREATEREGIONBTN = document.querySelector('#createRegionBtn')
 const REGIONMODAL = document.querySelector('#regionFormContainer');
 const CANCELBTN = document.querySelector('#cancelRegionBtn');
 //URL para fetch
-const urlRegion = `http://localhost:3010/geo/region`;
-const urlCountry = `http://localhost:3010/country/country`;
-const urlCity = `http://localhost:3010/cities/city`;
-const test = 'http://localhost:3010/tree/allzz/';
+const urlRegion = rutas.urlRegion;
+const urlCountry = rutas.url1Country;
+const urlCity = rutas.urlALLCITY
+const test = rutas.test
 
 /**jstree
  * Codigo para plantar el arbol

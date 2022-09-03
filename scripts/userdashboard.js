@@ -1,5 +1,5 @@
 import { fetchdata, getdata } from '../routes/fetchdata.js';
-
+import { rutas } from '../scripts/rutas.js'
 
 //constantes
 const NAME = document.querySelector('#name');
@@ -12,7 +12,7 @@ const ERRORPASS = document.querySelector('#errorPass')
 const USERBTN = document.querySelector('#createUserbtn');
 const userERROR = document.querySelector('#userError');
 
-const urlUSER = `http://localhost:3010/api/user/`;
+const urlUSER = rutas.urlUSER;
 
 /**
  * Crea un usuario del sistema, solo un admin

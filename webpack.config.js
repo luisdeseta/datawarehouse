@@ -1,0 +1,11 @@
+const Dotenv = require('dotenv-webpack');
+
+module.exports = {
+
+    plugins: [
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+        }),
+    ]
+
+};

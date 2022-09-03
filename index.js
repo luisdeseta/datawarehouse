@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyparser = require('body-parser');
 require('dotenv').config();
+require('dotenv-webpack');
 const PORT = process.env.PORT || 3001;
 const sequelize = require('./services/conection');
 const expressJwt = require('express-jwt');
@@ -22,6 +23,7 @@ const { country_route, Country } = require('./routes/country');
 const { city_route, City } = require('./routes/city');
 const { route_tree } = require('./routes/jstree');
 const { cia_route, Company } = require('./routes/company');
+const { contact } = require('./routes/contacts');
 
 //Middlewares
 const { isAdmin, validateToken, validateLogin, isUser } = require('./services/middleware')
@@ -33,7 +35,9 @@ app.use('/geo', validateToken, isUser, region_route);
 app.use('/country', validateToken, isUser, country_route);
 app.use('/cities', validateToken, isUser, city_route);
 app.use('/tree', route_tree);
-app.use('/company', validateToken, isUser, cia_route)
+app.use('/company', validateToken, isUser, cia_route);
+app.use('/contact', contact);
+
 
 //Test
 app.get('/', (req, res) => {
