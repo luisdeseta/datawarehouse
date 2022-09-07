@@ -146,7 +146,6 @@ router.get('/user/:nameSearch', async (req, res) => {
 })
 
 
-
 router.get('/allusers', async (req, res) => {
 
     try {

@@ -24,6 +24,8 @@ const { city_route, City } = require('./routes/city');
 const { route_tree } = require('./routes/jstree');
 const { cia_route, Company } = require('./routes/company');
 const { contact } = require('./routes/contacts');
+const { cont_channels } = require('./routes/contactChannels');
+const { channels } = require('./routes/channels');
 
 //Middlewares
 const { isAdmin, validateToken, validateLogin, isUser } = require('./services/middleware')
@@ -37,6 +39,8 @@ app.use('/cities', validateToken, isUser, city_route);
 app.use('/tree', route_tree);
 app.use('/company', validateToken, isUser, cia_route);
 app.use('/contact', contact);
+app.use('/contactandchannels', cont_channels);
+app.use('/channels', channels);
 
 
 //Test

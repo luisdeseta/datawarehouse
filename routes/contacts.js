@@ -9,8 +9,6 @@ const expressJwt = require('express-jwt');
 const req = require('express/lib/request');
 const expJWT = expressJwt({ secret: process.env.SECRET_TOKEN, algorithms: ['HS512'] });
 
-//constantes
-
 
 //usar contact para las rutas de contactos.
 
@@ -118,11 +116,64 @@ contact.get('/get/:contactName', async (req, res) => {
     }
 })
 //buscar todos los contactos
+contact.get('/getall', async (req, res) => {
+    try {
+        const contacts = await Contact.findAll({
+        });
+        res.status(200).json({ contacts })
+        console.log(contacts);
+
+    } catch (error) {
+        res.status(400).json({ Status: "Error en la sentencia SQL" })
+    }
+})
 
 //actualizar contactos
+contact.put('/update', async (req, res) => {
+    try {
+        //verificar duplicados
+        const verifyContact = await Contact.findAll({
+            where: { first_name: req.body.first_name }
+        })
+        if (verifyContact == 0) return res.status('403').json({ mensaje: `${req.body.first_name} no existe` })
+
+        await Contact.update({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            job_title: req.body.job_title,
+            email: req.body.email,
+            company_id: req.body.company_id,
+            city_id: req.body.city_id,
+            address: req.body.address,
+            interest: req.body.interest
+        },
+            { where: { id: verifyContact[0].id } }
+        )
+        res.status(200).json({ Status: `Contacto ${verifyContact[0].first_name}  actualizada!` })
+
+    } catch (error) {
+        res.status(401).json({ Status: 'Error en la sentencia SQL', error })
+    }
+})
 
 //eliminar contactos
+contact.delete('/delete/:id', async (req, res) => {
+    //
+    try {
+        const { id } = req.params
+        const deleteContact = await Contact.findAll({
+            where: { id: id }
+        })
+        if (deleteContact.length === 0) return res.status('403').json({ mensaje: `Contacto no existe` })
+        await Contact.destroy({
+            where: { id: id }
+        })
+        res.status(200).json({ Status: `Contacto ${deleteContact[0].first_name}  borrado!` })
 
+    } catch (error) {
+        res.status(401).json({ Status: 'Error en la sentencia SQL', error })
+    }
+})
 
 //Exports
 module.exports = { contact, Contact }
