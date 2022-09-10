@@ -4,11 +4,18 @@ const validator = require('validator');
 require('dotenv').config()
 const jwt = require('jsonwebtoken');
 const sequelize = require('../services/conection');
-const { Sequelize, DataTypes, Model, QueryTypes, Op } = require('sequelize');
+const { Sequelize, DataTypes, Model, QueryTypes, Op, where } = require('sequelize');
 const expressJwt = require('express-jwt');
 const req = require('express/lib/request');
 const expJWT = expressJwt({ secret: process.env.SECRET_TOKEN, algorithms: ['HS512'] });
 
+//importo los modelos
+const { region_route, Region } = require('../routes/region');
+const { country_route, Country } = require('../routes/country');
+const { city_route, City } = require('../routes/city');
+const { Company } = require('../routes/company');
+const { ContChannels } = require('../routes/contactChannels');
+const bodyParser = require('body-parser');
 
 //usar contact para las rutas de contactos.
 
@@ -73,7 +80,7 @@ const Contact = sequelize.define("contact", {
 )
 
 //crear contacto
-contact.post('/create', async (req, res) => {
+contact.post('/contact', async (req, res) => {
     //Verificar si el contacto existe
     const verifyContact = await Contact.findAll({
         where: { email: req.body.email }
@@ -97,7 +104,7 @@ contact.post('/create', async (req, res) => {
     }
 })
 //buscar un contacto
-contact.get('/get/:contactName', async (req, res) => {
+contact.get('/contact/:contactName', async (req, res) => {
     try {
         const { contactName } = req.params;
         const query = await Contact.findAll({
@@ -118,10 +125,10 @@ contact.get('/get/:contactName', async (req, res) => {
 //buscar todos los contactos
 contact.get('/getall', async (req, res) => {
     try {
-        const contacts = await Contact.findAll({
+        const query = await Contact.findAll({
         });
-        res.status(200).json({ contacts })
-        console.log(contacts);
+        res.status(200).json({ query })
+        console.log(query);
 
     } catch (error) {
         res.status(400).json({ Status: "Error en la sentencia SQL" })
@@ -129,13 +136,13 @@ contact.get('/getall', async (req, res) => {
 })
 
 //actualizar contactos
-contact.put('/update', async (req, res) => {
+contact.put('/contact', async (req, res) => {
     try {
         //verificar duplicados
-        const verifyContact = await Contact.findAll({
+        const query = await Contact.findAll({
             where: { first_name: req.body.first_name }
         })
-        if (verifyContact == 0) return res.status('403').json({ mensaje: `${req.body.first_name} no existe` })
+        if (query == 0) return res.status('403').json({ mensaje: `${req.body.first_name} no existe` })
 
         await Contact.update({
             first_name: req.body.first_name,
@@ -149,7 +156,7 @@ contact.put('/update', async (req, res) => {
         },
             { where: { id: verifyContact[0].id } }
         )
-        res.status(200).json({ Status: `Contacto ${verifyContact[0].first_name}  actualizada!` })
+        res.status(200).json({ Status: `Contacto ${query[0].first_name}  actualizada!` })
 
     } catch (error) {
         res.status(401).json({ Status: 'Error en la sentencia SQL', error })
@@ -157,7 +164,7 @@ contact.put('/update', async (req, res) => {
 })
 
 //eliminar contactos
-contact.delete('/delete/:id', async (req, res) => {
+contact.delete('/contact/:id', async (req, res) => {
     //
     try {
         const { id } = req.params
@@ -174,6 +181,74 @@ contact.delete('/delete/:id', async (req, res) => {
         res.status(401).json({ Status: 'Error en la sentencia SQL', error })
     }
 })
+
+
+//join para traer city contact y companies
+Region.hasMany(Country, {
+    foreignKey: 'regions_id'
+});
+Country.belongsTo(Region, {
+    foreignKey: 'regions_id'
+});
+Country.hasMany(City, {
+    foreignKey: 'country_id'
+});
+City.belongsTo(Country, {
+    foreignKey: 'country_id'
+})
+
+//join entre contacts y city
+City.hasMany(Contact, {
+    foreignKey: 'city_id'
+})
+Contact.belongsTo(City, {
+    foreignKey: 'city_id'
+})
+
+
+
+//join entre contact y company
+Company.hasMany(Contact, {
+    foreignKey: 'company_id'
+})
+Contact.belongsTo(Company, {
+    foreignKey: 'company_id'
+})
+
+contact.get('/allcontactinfo/', async (req, res) => {
+    //const { idContact } = req.params;
+    try {
+        const query = await Contact.findAll(
+            {
+                include: [
+                    {
+                        model: City,
+                        include: [{
+                            model: Country,
+                            include: [{
+                                model: Region
+                            }]
+                        }]
+                    },
+                    Company
+                ],
+                //where: { id: { [Op.like]: `%${idContact}%` } }
+            }
+
+        )
+
+
+        res.status(200).json({ query })
+
+    } catch (error) {
+
+        res.json({ Error: error })
+        console.log("el error ", error)
+    }
+
+})
+
+
 
 //Exports
 module.exports = { contact, Contact }

@@ -128,4 +128,8 @@ h2 {
 #10:hover {
   color: red;
 }
+
+.insideText {
+  font-size: small;
+}
 /*# sourceMappingURL=style.css.map */

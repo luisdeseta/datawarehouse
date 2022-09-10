@@ -15,6 +15,12 @@ export const rutas = {
     urlUSER: `http://${HOST}:${PORT}/api/user/`,
     urlALL: `http://${HOST}:${PORT}/api/allusers`,
 
+    urlCONTACT: `http://${HOST}:${PORT}/contact/contact/`,
+    urlALLCONTACT: `http://${HOST}:${PORT}/contact/getall/`,
+    urlCONTACTGEO: `http://${HOST}:${PORT}/contact/region/`,
+    urlCONTACTCIA: `http://${HOST}:${PORT}/contact/company/`,
+    urlALLCONTACTINFO: `http://${HOST}:${PORT}/contact/allcontactinfo/`,
+
 
     test: `http://${HOST}:${PORT}/tree/allzz/`,
 }
