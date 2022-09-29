@@ -15,10 +15,12 @@ export const rutas = {
     urlUSER: `http://${HOST}:${PORT}/api/user/`,
     urlALL: `http://${HOST}:${PORT}/api/allusers`,
 
+    //para buscar un contacto. Trae todos los contactoes en un solo objeto
     urlCONTACT: `http://${HOST}:${PORT}/contact/contact/`,
     urlALLCONTACT: `http://${HOST}:${PORT}/contact/getall/`,
     urlCONTACTGEO: `http://${HOST}:${PORT}/contact/region/`,
     urlCONTACTCIA: `http://${HOST}:${PORT}/contact/company/`,
+    //Trae todos los datos en un ARRAY  objeto para mostrar todo el front:
     urlALLCONTACTINFO: `http://${HOST}:${PORT}/contact/allcontactinfo/`,
 
 

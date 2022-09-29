@@ -133,8 +133,10 @@ router.get('/user/:nameSearch', async (req, res) => {
         //busqueda por nombre o por email
         const users = await User.findAll({
             where: {
-                [Op.or]: [{ first_name: { [Op.like]: `%${nameSearch}%` } },
-                { email: { [Op.like]: `%${nameSearch}%` } }]
+                [Op.or]: [
+                    { first_name: { [Op.like]: `%${nameSearch}%` } },
+                    { email: { [Op.like]: `%${nameSearch}%` } }
+                ]
             }
         });
         res.status(200).json({ users })

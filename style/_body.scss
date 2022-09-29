@@ -122,3 +122,36 @@
  .insideText {
    font-size: small;
  }
+
+ .arrow {
+   rotate: 90deg;
+   cursor: pointer;
+ }
+
+ .contactActions {
+   display: flex;
+   justify-content: space-between;
+
+   #valueBTN {
+     display: flex;
+     flex-wrap: nowrap;
+   }
+ }
+
+ #addBTNContainer {
+   padding: 0 10px 10px 0;
+ }
+
+ #trashContainer {
+   padding: 0 10px 10px 0;
+   cursor: pointer;
+ }
+
+ .td:hover {
+   background-color: lightgray;
+ }
+
+
+ .rowCheked {
+   background-color: lightgray;
+ }

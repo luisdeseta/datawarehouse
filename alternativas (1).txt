@@ -1,0 +1,167 @@
+
+
+[
+	{  rid : 1,
+		nombre: "Latam",
+		paises : [
+			{
+				pid: 54,
+				name: "Argentina",
+				ciudades: [
+					{
+						cid : 1,
+						name : "BsAs"
+					},
+					{
+						cid : 2,
+						name : "La PLata"
+					}
+				]
+			},
+			{
+				pid: 11,
+				name : "Colombia"
+				ciudades: [
+				]
+			}
+		]
+	},
+	{
+		rid: 2,
+		name: "Norte...",
+		paises : [
+			{
+				pid : 1,
+				name : "Estadus ...",
+			},
+			{
+				pid : 2,
+				name : "Canada"
+			}
+		]
+	}
+]
+
+select * from regions
+
+foreach ( R ) {
+
+	select * from countries where region_id = R.id
+
+	foreach ( P )
+		select * from cities where country_id = P.id
+
+}
+
+
+// =============================================================================
+
+[
+	{ 
+		rid: 1,
+		rname : "Latam",
+		pid: 54,
+		pname : "Argentina",
+		cid: 1,
+		cname: "BsAs"
+	},
+	{ 
+		rid: 1,
+		rname : "Latam",
+		pid: 54,
+		pname : "Argentina",
+		cid: 2,
+		cname: "La Plata"
+	},
+	{ 
+		rid: 1,
+		rname : "Latam",
+		pid: 11,
+		pname : "Colombia",
+		cid: null,
+		cname: null
+	},
+
+
+]
+
+
+select R.id    as rid
+,      R.name  as rname
+,      P.id    as pid
+,      P.name  as pname
+,	   C.id    as cid
+,      C.name  as cname
+from   regions R 
+left join   countries P on p.region_id = R.id
+left join   cities C on c.country_id = P.id
+order by r.name, p.name, c.name ;
+
+// ======
+
+
+select cm.id, cm.name, cm....
+,      ct.name
+,      cn.name 
+from   comapnies cm 
+join   cities ct on cm.city_id = ct.id
+join   countries cn on cn.id = ct.country_id
+
+
+// ===== busqueda 
+
+select cnt.id, cnt.name, cnt......
+,    cmp.name
+,    cry.name
+,    cty.name 
+from   contacts cnt 
+join   companies cmp on cnt.company_id = cmp.id 
+join   cities    cty on cnt.city_id = cty.id
+join   countries cry on cty.country.id = cry.id
+where cnt.name like '%paz%'
+on    cnt.email like '%paz%' 
+or    cty.name like '%paz%'
+or    cry.name like '%paz%'
+order by cnt.name
+
+
+
+// Paginado
+
+select *
+from   contacts 
+orger by name desc
+limit 0, 10
+
+limit 10,10
+
+
+// Delete (desaconcejado)
+
+delete from contact where id in ( 8 , 1 , 17, 12, 6 ) ;
+
+
+// 
+
+CREATE TABLE IF NOT EXISTS `mydb`.`contact_channels` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `contacs_id` INT NOT NULL,
+  `channels_id` INT NOT NULL,
+  `account` VARCHAR(200) NULL,
+  `preference` ENUM('0', '1', '2') NULL COMMENT '0 - no molestar\n1 - sin preferencia\n2 - favorito ',
+  PRIMARY KEY (`id`),
+  INDEX `fk_contact_channels_contacs1_idx` (`contacs_id` ASC),
+  INDEX `fk_contact_channels_channels1_idx` (`channels_id` ASC),
+  CONSTRAINT `fk_contact_channels_contacs1`
+    FOREIGN KEY (`contacs_id`)
+    REFERENCES `mydb`.`contacs` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_contact_channels_channels1`
+    FOREIGN KEY (`channels_id`)
+    REFERENCES `mydb`.`channels` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+
+

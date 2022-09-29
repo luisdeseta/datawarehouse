@@ -132,4 +132,43 @@ h2 {
 .insideText {
   font-size: small;
 }
+
+.arrow {
+  rotate: 90deg;
+  cursor: pointer;
+}
+
+.contactActions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.contactActions #valueBTN {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+}
+
+#addBTNContainer {
+  padding: 0 10px 10px 0;
+}
+
+#trashContainer {
+  padding: 0 10px 10px 0;
+  cursor: pointer;
+}
+
+.td:hover {
+  background-color: lightgray;
+}
+
+.rowCheked {
+  background-color: lightgray;
+}
 /*# sourceMappingURL=style.css.map */

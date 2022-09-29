@@ -4,7 +4,7 @@ const validator = require('validator');
 require('dotenv').config()
 const jwt = require('jsonwebtoken');
 const sequelize = require('../services/conection');
-const { Sequelize, DataTypes, Model, QueryTypes, Op, where } = require('sequelize');
+const { Sequelize, DataTypes, Model, QueryTypes, Op } = require('sequelize');
 const expressJwt = require('express-jwt');
 const req = require('express/lib/request');
 const expJWT = expressJwt({ secret: process.env.SECRET_TOKEN, algorithms: ['HS512'] });
@@ -103,25 +103,85 @@ contact.post('/contact', async (req, res) => {
         console.log("Contact error", error)
     }
 })
-//buscar un contacto
-contact.get('/contact/:contactName', async (req, res) => {
-    try {
-        const { contactName } = req.params;
-        const query = await Contact.findAll({
-            where: { first_name: { [Op.like]: `%${contactName}%` } }
-        })
-        console.log(query)
-        if (query.length == 0) return res.status('403').json({ mensaje: `${contactName} no existe` })
-        res.status(200).json({
-            query
-        })
 
+/////
+contact.get('/contact/?', async (req, res) => {
+    const { name } = req.query
+
+    try {
+        let find = "SELECT `contact`.`id` , `contact`.`first_name`, `contact`.`last_name`, `contact`.`job_title`, `contact`.`email`, `contact`.`company_id`, `contact`.`city_id`, `contact`.`address`, `contact`.`interest`, `city`.`id` AS `city.id`, `city`.`country_id` AS `city.country_id`, `city`.`name` AS `city.name`, `city->country`.`id` AS `city.country.id`, `city->country`.`regions_id` AS `city.country.regions_id`, `city->country`.`name` AS `city.country.name`, `city->country->region`.`id` AS `city.country.region.id`, `city->country->region`.`name` AS `city.country.region.name`, `city->country->region`.`parent` AS `city.country.region.parent`, `company`.`id` AS `company.id`, `company`.`name` AS `company.name`, `company`.`address` AS `company.address`, `company`.`email` AS `company.email`, `company`.`phone` AS `company.phone`, `company`.`city_id` AS `company.city_id` FROM `contacts` AS `contact` LEFT OUTER JOIN `cities` AS `city` ON `contact`.`city_id` = `city`.`id` LEFT OUTER JOIN `countries` AS `city->country` ON `city`.`country_id` = `city->country`.`id` LEFT OUTER JOIN `regions` AS `city->country->region` ON `city->country`.`regions_id` = `city->country->region`.`id` LEFT OUTER JOIN `companies` AS `company` ON `contact`.`company_id` = `company`.`id` WHERE (`city`.`name` LIKE :_search OR`city`.`name` LIKE :_search OR `city->country`.`name` LIKE :_search OR`city->country->region`.`name` LIKE :_search OR `city->country->region`.`name` LIKE :_search OR `contact`.`first_name` LIKE :_search OR `contact`.`last_name` LIKE :_search OR `contact`.`email` LIKE :_search OR `contact`.`job_title` LIKE :_search OR `contact`.`address` LIKE :_search OR `company`.`name` LIKE :_search)"
+        const query = await sequelize.query(find,
+
+            {
+                type: QueryTypes.SELECT,
+                replacements: {
+                    _search: `%${name || ""}%`
+                }
+            }
+        )
+        res.status(200).json({ query })
 
     } catch (error) {
-        res.json({ error })
-        console.log("error  ", error)
+        res.json({ Error: error })
+        console.log("el error ", error)
     }
+
+
 })
+/////
+//buscar un contacto
+contact.get('/contactzz/:contactName', async (req, res) => {
+    try {
+        const { contactName } = req.params;
+
+
+
+        // INTENTAR CON UNA RAW QUERY
+        const query = await Contact.findAll(
+            {
+                include: [
+                    {
+                        model: City,
+                        //required: false,
+
+                        include: [{
+                            model: Country,
+                            include: [{
+                                model: Region,
+                            }]
+                        }]
+                    },
+                    Company
+
+                ],
+                where: {
+                    [Op.or]: [
+                        { first_name: { [Op.like]: `%${contactName}%` } },
+                        { last_name: { [Op.like]: `%${contactName}%` } },
+                        { email: { [Op.like]: `%${contactName}%` } },
+                        { job_title: { [Op.like]: `%${contactName}%` } },
+                        { address: { [Op.like]: `%${contactName}%` } },
+
+                    ],
+
+                }
+            }
+
+        )
+
+
+        res.status(200).json({ query })
+
+    } catch (error) {
+
+        res.json({ Error: error })
+        console.log("el error ", error)
+    }
+
+
+})
+
+
 //buscar todos los contactos
 contact.get('/getall', async (req, res) => {
     try {
@@ -154,7 +214,7 @@ contact.put('/contact', async (req, res) => {
             address: req.body.address,
             interest: req.body.interest
         },
-            { where: { id: verifyContact[0].id } }
+            { where: { id: query[0].id } }
         )
         res.status(200).json({ Status: `Contacto ${query[0].first_name}  actualizada!` })
 
@@ -164,18 +224,31 @@ contact.put('/contact', async (req, res) => {
 })
 
 //eliminar contactos
-contact.delete('/contact/:id', async (req, res) => {
-    //
+contact.delete('/contact/', async (req, res) => {
+    //Recive un array con los ids
+    const { ids } = req.body
     try {
-        const { id } = req.params
-        const deleteContact = await Contact.findAll({
-            where: { id: id }
-        })
-        if (deleteContact.length === 0) return res.status('403').json({ mensaje: `Contacto no existe` })
-        await Contact.destroy({
-            where: { id: id }
-        })
-        res.status(200).json({ Status: `Contacto ${deleteContact[0].first_name}  borrado!` })
+        let dele = "DELETE FROM `contacts` WHERE `id` IN (:_delete)"
+        let find = "SELECT `id`, `first_name`, `last_name`, `job_title`, `email`, `company_id`, `city_id`, `address`, `interest` FROM `contacts` AS `contact` WHERE `contact`.`id` IN (:_search)"
+        const deleteContact = await sequelize.query(find,
+            {
+                type: QueryTypes.SELECT,
+                replacements: {
+                    _search: ids
+                }
+            })
+        if (deleteContact.length === 0) return res.status('403').json({ mensaje: `el Contacto no existe!!!! :C` })
+        console.log("deleteContact ", deleteContact)
+        const query = await sequelize.query(dele,
+
+            {
+                type: QueryTypes.DELETE,
+                replacements: {
+                    _delete: ids
+                }
+            }
+        )
+        res.status(200).json({ Status: `Contacto  borrado :D ` })
 
     } catch (error) {
         res.status(401).json({ Status: 'Error en la sentencia SQL', error })
