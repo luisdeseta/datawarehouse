@@ -116,16 +116,41 @@ cia_route.put('/cia', async (req, res) => {
         res.status(401).json({ Status: 'Error en la sentencia SQL', error })
     }
 })
+//Traigo los modelos para poder traer el nombre de la cia
+const { City } = require('../routes/city');
+//armo las relaciones entre modelos
+City.hasMany(Company, {
+    foreignKey: 'city_id'
+});
+Company.belongsTo(City, {
+    foreignKey: 'city_id'
+})
+cia_route.get('/cia/allcompanies', async (req, res) => {
+    //
+    try {
+        const query = await Company.findAll({
+            include: [
+                { model: City }
+            ]
+        })
+        res.status(200).json({ query })
+    } catch (error) {
+        res.json({ Error: error })
+        res.status(400).json({ Status: "Error en la sentencia SQL" })
+    }
+
+})
+
 
 //Obetener todas las compañías
 cia_route.get('/cia/companies', async (req, res) => {
     //
     try {
-        const queryCia = await Company.findAll({
+        const query = await Company.findAll({
             //attributes: ['name'],
         })
-        res.status(200).json({ queryCia });
-        console.log(queryCia);
+        res.status(200).json({ query });
+        console.log(query);
 
     } catch (error) {
         res.json({ Error: error })
@@ -137,12 +162,15 @@ cia_route.get('/cia/companies', async (req, res) => {
 cia_route.get('/cia/:ciaName', async (req, res) => {
     try {
         const { ciaName } = req.params;
-        const queryCia = await Company.findAll({
-            where: { [Op.or]: [{ name: { [Op.like]: `%${ciaName}%` } }] }
+        const query = await Company.findAll({
+            where: { [Op.or]: [{ name: { [Op.like]: `%${ciaName}%` } }] },
+            include: [
+                { model: City }
+            ]
         })
-        console.log("get cia ", queryCia)
-        if (queryCia.length == 0) return res.status('403').json({ mensaje: `${ciaName} no existe` })
-        res.status(200).json({ queryCia })
+        console.log("get cia ", query)
+        if (query.length == 0) return res.status('403').json({ mensaje: `${ciaName} no existe` })
+        res.status(200).json({ query })
 
     } catch (error) {
         res.json({ Error: error })

@@ -90,6 +90,24 @@ region_route.get('/region/:region', async (req, res) => {
     }
 })
 
+//All Region
+region_route.get('/all', async (req, res) => {
+    //verificar el token
+    try {
+        const query = await Region.findAll({
+
+        })
+        console.log(query)
+        if (query.length == 0) return res.status('403').json({ mensaje: `no existe` })
+        res.status(200).json({
+            query
+
+        })
+    } catch (error) {
+        res.json({ Error: error })
+        console.log("el error ", error)
+    }
+})
 
 region_route.put('/region', async (req, res) => {
     //verificar token

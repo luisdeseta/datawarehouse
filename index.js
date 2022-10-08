@@ -33,11 +33,11 @@ const { isAdmin, validateToken, validateLogin, isUser } = require('./services/mi
 app.use(cors());
 app.use('/admin', auth);
 app.use('/api', validateToken, isAdmin, router);
-app.use('/geo', validateToken, isUser, region_route);
-app.use('/country', validateToken, isUser, country_route);
+app.use('/geo', region_route);
+app.use('/country', country_route);
 app.use('/cities', validateToken, isUser, city_route);
 app.use('/tree', route_tree);
-app.use('/company', validateToken, isUser, cia_route);
+app.use('/company', cia_route);
 app.use('/contact', contact);
 app.use('/contactandchannels', cont_channels);
 app.use('/channels', channels);

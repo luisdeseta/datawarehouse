@@ -52,14 +52,13 @@ city_route.get('/city/:city', async (req, res) => {
     //verificar el token
     try {
         const { city } = req.params;
-        const queryCity = await City.findAll({
-            where: { [Op.or]: [{ id: { [Op.like]: `%${city}%` } }, { name: { [Op.like]: `%${city}%` } }] }
+        const query = await City.findAll({
+            where: { [Op.or]: [{ id: { [Op.like]: `${city}` } }, { name: { [Op.like]: `%${city}%` } }] }
         })
-        console.log(queryCity)
-        if (queryCity.length == 0) return res.status('403').json({ mensaje: `${City} no existe` })
+        console.log(query)
+        if (query.length == 0) return res.status('403').json({ mensaje: `${City} no existe` })
         res.status(200).json({
-            city: queryCity[0].name,
-            ID: queryCity[0].id
+            query
         })
 
 
@@ -108,11 +107,17 @@ City.belongsTo(Country, {
     foreignKey: 'country_id'
 })
 //Ruta para buscar ciudades por pais
-city_route.get('/citybycountry/:country', async (req, res) => {
+city_route.get('/citybycountry/?', async (req, res) => {
     try {
-        const { country } = req.params;
+        const { country } = req.query;
         const query = await City.findAll({
-            where: { country_id: [`${country}`] },
+            where: {
+                [Op.or]: [{ country_id: { [Op.like]: `${country || "%"}` } },
+                    //{ name: { [Op.like]: `%${city}%` } }
+
+                ]
+            }
+            //where: { country_id: [`${country}`] },
             //attributes: ['name']
         })
         console.log(query)

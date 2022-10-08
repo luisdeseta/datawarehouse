@@ -45,10 +45,10 @@ const ContChannels = sequelize.define("contact_channels", {
 //crear contact_channels
 cont_channels.post('/create', async (req, res) => {
     //Verificar si el contact_channels existe
-    const verifyContact = await ContChannels.findAll({
+    /* const verifyContact = await ContChannels.findAll({
         where: { contacts_id: req.body.contacts_id }
     })
-    if (verifyContact.length != 0) return res.status('403').json({ mensaje: `${req.body.contacts_id} ya existe` })
+    if (verifyContact.length != 0) return res.status('403').json({ mensaje: `${req.body.contacts_id} ya existe` }) */
     try {
         const newContact = await ContChannels.create({
             contacts_id: req.body.contacts_id,

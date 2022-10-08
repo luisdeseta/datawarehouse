@@ -89,14 +89,29 @@
             <label for="ciaNameForm" class="form-label">Nombre</label>
             <input type="text" class="form-control" id="ciaNameForm" placeholder="Nombre de Compania" autocomplete="off" required>
           </div>
-<!--           <div class="col-md-4">
+          <div class="col-md-4">
             <label for="ciaCountry" class="form-label">País</label>
-            <input type="text" class="form-control" id="ciaCountry" placeholder="País" autocomplete="off" >
-          </div> -->
+            <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example"  id="ciaCountry">
+              <option selected>Selecionar</option>
+              <option value="1">País 1</option>
+              <option value="2">País 2</option>
+              
+            </select>
+          </div>
           <div class="col-md-4">
             <label for="ciaCity" class="form-label">Ciudad</label>
-            <input type="text" class="form-control" id="ciaCity" placeholder="Ciudad" autocomplete="off" required>
+            <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example"  id="ciaCity">
+              <option selected="1">Selecionar un país primero</option>
+              <option selected="" value="1">Ciudad 1</option>
+              <option selected="" value="2">Ciudad 2</option>
+              
+            </select>
           </div>
+<!--           <div class="col-md-4">
+            <label for="ciaCity" class="form-label">Ciudad</label>
+            <input type="text" class="form-control" id="ciaCity" placeholder="Ciudad" autocomplete="off" required>
+          </div> -->
+
           <div class="col-md-4">
             <label for="ciaDirInput" class="form-label">Dirección</label>
             <input type="text" class="form-control" id="ciaDirInput" placeholder="Siempre viva 123" autocomplete="off"> 
@@ -125,6 +140,7 @@
     <!-- Fin Form de Actualización de Compania-->
 
 
-    <script type="module" src="../scripts/companieslist.js"></script>    
+    <script type="module" src="../scripts/companieslist.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>    
 </body>
 </html>

@@ -132,5 +132,39 @@ country_route.get('/countries', async (req, res) => {
         console.log("el error ", error)
     }
 })
+
+
+//importo los modelos
+const { Region } = require('../routes/region');
+//armo las relaciones entre modelos
+Region.hasMany(Country, {
+    foreignKey: 'regions_id'
+});
+Country.belongsTo(Region, {
+    foreignKey: 'regions_id'
+})
+//Ruta para buscar pais por region
+country_route.get('/countrybyregion/:region', async (req, res) => {
+    try {
+        const { region } = req.params;
+        const query = await Country.findAll({
+            where: { regions_id: [`${region}`] },
+            //attributes: ['name']
+        })
+        console.log(query)
+        if (query.length == 0) return res.status('403').json({ mensaje: `${Country} no existe` })
+        res.status(200).json({
+            query
+        })
+
+
+    } catch (error) {
+        res.json({ Error: error })
+        console.log("el error ", error)
+    }
+})
+
+
+
 //Exports
 module.exports = { country_route, Country }

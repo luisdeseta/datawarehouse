@@ -25,11 +25,7 @@ const urlCIA = rutas.urlCIA
 const urlALLCITY = rutas.urlALLCITY
 const urlCOUNRTY = rutas.urlCOUNRTY
 const urlCITYBYCOUNTRY = rutas.urlCITYBYCOUNTRY
-/* 
-const urlCIA = process.env.urlCIA
-const urlALLCITY = process.env.urlALLCITY
-const urlCOUNRTY = process.env.urlCOUNRTY
-const urlCITYBYCOUNTRY = process.env.urlCITYBYCOUNTRY */
+
 /**
  * Agrega una cía.
  */
@@ -68,12 +64,14 @@ const forPopUp = (url, search = "", where) => {
                 element += "<option selected>País sin ciudades cargadas</option>"
                 where.innerHTML = element
             } else {
-                console.log('RES ', res)
+                //console.log('RES ', res)
                 let element = "";
                 for (let i = 0; i < res.query.length; i++) {
                     array.push(res.query[i]);
 
                 }
+                //array.unshift({ id: 9999999, regions_id: 9999999, name: "-- Selecionar --" })
+                //console.log("array ", array)
                 for (let e = 0; e < array.length; e++) {
                     element += markUpAny(
                         array[e].id,
@@ -81,7 +79,6 @@ const forPopUp = (url, search = "", where) => {
                     );
 
                 }
-                element += "<option selected>Selecionar</option>"
                 where.innerHTML = element
 
             }
@@ -91,30 +88,7 @@ const forPopUp = (url, search = "", where) => {
         })
 }
 
-const forPopUpBACKUP = (url, search = "", where) => {
-    const array = []
-    getdata(url, 'GET', search)
-        .then((res) => {
-            console.log('RES ', res.query)
-            let element = "";
-            for (let i = 0; i < res.query.length; i++) {
-                array.push(res.query[i]);
 
-            }
-            for (let e = 0; e < array.length; e++) {
-                element += markUpAny(
-                    array[e].id,
-                    array[e].name
-                );
-
-            }
-            element += "<option selected>Selecionar</option>"
-            where.innerHTML = element
-        })
-        .catch((err) => {
-            console.log('err ', err)
-        })
-}
 //DIBUJAR EL HTML DE CITY/country  
 const markUpAny = (ID, Name) => {
     return `
@@ -126,8 +100,7 @@ const markUpAny = (ID, Name) => {
 
 //Para el popup de cities
 function popUpCity() {
-    const countryID = COUNTRYSELECT.value
-    forPopUp(urlCITYBYCOUNTRY, countryID, CIACITYSELECT)
+    forPopUp(urlCITYBYCOUNTRY, `?country=${COUNTRYSELECT.value}`, CIACITYSELECT)
 }
 
 //Para el popup de countries

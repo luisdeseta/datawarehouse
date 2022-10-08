@@ -1,5 +1,5 @@
 import { fetchdata, getdata, deldata } from '../routes/fetchdata.js';
-import { rutas } from '../scripts/rutas.js'
+import { rutas } from '../scripts/rutas.js';
 
 //constantes
 const NAME = document.querySelector('#nameCia');
@@ -19,12 +19,15 @@ const ciaTable = document.querySelector('#testCompany');
 const UPDATECIABT = document.querySelector('#updateCiabtn');
 const CANCELCIABTN = document.querySelector('#cancelCiarbtn');
 const CIAFORM = document.querySelector('#theCiaForm')
-//const CIACOUNTRY = document.querySelector('#ciaCountry');
-
+const ciaCountry = document.querySelector('#ciaCountry');
 //url fetch
 const urlCIA = rutas.urlCIA
 const urlAllCia = rutas.urlAllCia
 const urlALLCITY = rutas.urlALLCITY
+const urlAllDataCia = rutas.urlAllDataCia
+const urlCOUNRTY = rutas.urlCOUNRTY
+const urlCITYBYCOUNTRY = rutas.urlCITYBYCOUNTRY
+
 //Buscar cía
 const searchCia = (url, search = "") => {
     //
@@ -32,17 +35,17 @@ const searchCia = (url, search = "") => {
     getdata(url, 'GET', search)
         .then((res) => {
             //const {data} = res;
-            //console.log("res getdata searchCia", res)
+            console.log("res getdata searchCia", res.query)
             let element = "";
-            for (let i = 0; i < res.queryCia.length; i++) {
-                array.push(res.queryCia[i]);
+            for (let i = 0; i < res.query.length; i++) {
+                array.push(res.query[i]);
             }
             for (let e = 0; e < array.length; e++) {
                 element += markUpSearch(
                     e,
                     array[e].id,
                     array[e].name,
-                    array[e].city_id,
+                    array[e].city.name,
                     array[e].address,
                     array[e].email,
                     array[e].phone);
@@ -69,12 +72,17 @@ const searchCia = (url, search = "") => {
                             i,
                             array[i].id,
                             array[i].name,
-                            array[i].city_id,
+                            array[i].city.name,
                             array[i].address,
                             array[i].email,
-                            array[i].phone);
+                            array[i].phone,
+                        );
+                        //forPopUpCity(urlALLCITY, ``, CIACITY)
+                        $("#ciaCountry").val(array[i].city.country_id)
+                        $("#ciaCity").val(array[i].city.id)
                     });
             }
+            console.log('array ', array)
         })
 
 
@@ -87,18 +95,18 @@ const searchCia = (url, search = "") => {
 //Markup para dibujar la tabla de cias
 const markUpSearch = (order, id, name, city, address, email, phone) => {
     return `
-    <tr>
-    <td>${order}</td>
-    <td>${id}</td>
-    <td>${name}</td>
-    <td>${city}</td>
-    <td>${address}</td>
-    <td>${email}</td>
-    <td>${phone}</td>
-    <td id="act-${id}"><button class="btn btn-primary me-md-2" type="button">Actualizar</button></td>
-    <td id="del-${id}"><button class="btn btn-primary me-md-2" type="button">Borrar</button></td>
-    </tr>
-    `
+            <tr>
+            <td>${order}</td>
+            <td>${id}</td>
+            <td>${name}</td>
+            <td>${city}</td>
+            <td>${address}</td>
+            <td>${email}</td>
+            <td>${phone}</td>
+            <td id="act-${id}"><button class="btn btn-primary me-md-2" type="button">Actualizar</button></td>
+            <td id="del-${id}"><button class="btn btn-primary me-md-2" type="button">Borrar</button></td>
+            </tr>
+            `
 }
 
 /**
@@ -134,7 +142,7 @@ const setValueCia = (order, id, name, city, address, email, phone) => {
     //carga el valor en cada campo
     ID.setAttribute('value', id)
     CIANAMEUPDATE.setAttribute('value', name);
-    CIACITY.setAttribute('value', city);
+    CIACITY.setAttribute('value', city.name);
     CIAADDRESS.setAttribute('value', address);
     CIAEMAIL.setAttribute('value', email);
     CIAPHONE.setAttribute('value', phone)
@@ -161,12 +169,11 @@ const updateCia = () => {
         .then((res) => {
             console.log("data updateCia ", data)
             //reseteo los valores del form
-            //console.log('res update cia', res)
             CIAFORM.reset();
         })
         .then((res) => {
             //ejecuto la busqueda para mostrar la lista nuevamente
-            searchCia(urlAllCia);
+            searchCia(urlAllDataCia);
             CIAFORMCONTAINER.style.display = "none";
 
         })
@@ -201,11 +208,111 @@ const doSearchCia = (z) => {
 
 }
 
+//Consulta el listado de country
+const forPopUp = (url, search = "", where) => {
+    const array = []
+    getdata(url, 'GET', search)
+        .then((res) => {
+            //Sirve para cuando el pais no tiene ciudades cargas
+            if (res.query == null) {
+                let element = "";
+                element += "<option selected>País sin ciudades cargadas</option>"
+                where.innerHTML = element
+            } else {
+                //console.log('RES ', res)
+                let element = "";
+                for (let i = 0; i < res.query.length; i++) {
+                    array.push(res.query[i]);
+
+                }
+                //array.unshift({ id: 9999999, regions_id: 9999999, name: "-- Selecionar --" })
+                //console.log("array ", array)
+                for (let e = 0; e < array.length; e++) {
+                    element += markUpAny(
+                        array[e].id,
+                        array[e].name
+                    );
+
+                }
+
+                where.innerHTML = element
+
+            }
+        })
+        .catch((err) => {
+            console.log('err ', err)
+        })
+}
+
+//consulta para el popup de City
+const forPopUpCity = (url, search = "", where) => {
+    const array = []
+    getdata(url, 'GET', search)
+        .then((res) => {
+            //Sirve para cuando el pais no tiene ciudades cargas
+            /* if (res.query == null) {
+                let element = "";
+                element += "<option selected>País sin ciudades cargadas</option>"
+                where.innerHTML = element
+            } else {
+                //console.log('RES ', res)
+            
+            
+            } */
+
+            let element = "";
+            for (let i = 0; i < res.query.length; i++) {
+                array.push(res.query[i]);
+
+            }
+            //array.unshift({ id: 9999999, regions_id: 9999999, name: "-- Selecionar --" })
+            //console.log("array ", array)
+            for (let e = 0; e < array.length; e++) {
+                element += markUpAny(
+                    array[e].id,
+                    array[e].name
+                );
+            }
+            where.innerHTML = element
+
+        })
+        .catch((err) => {
+            console.log('err ', err)
+        })
+}
+
+//DIBUJAR EL HTML DE CITY/country  
+const markUpAny = (ID, Name) => {
+    return `
+    
+    <option value="${ID}">${Name}</option>
+
+    `
+}
+//DIBUJAR EL HTML DE CITY seleccionada. Sirve para hacer update de la cía 
+const markUpCity = (ID, Name) => {
+    return `
+    
+    <option value="${ID}">Seleccione pais para cambiar</option>
+
+    `
+}
+
+//ejecuto el popup de country
+forPopUp(urlCOUNRTY, "", ciaCountry)
+forPopUpCity(urlALLCITY, ``, CIACITY)
+
+//popup de city
+function popUpCity() {
+    const countryID = ciaCountry.value
+    forPopUp(urlCITYBYCOUNTRY, `?country=${ciaCountry.value}`, CIACITY)
+}
 //ejecuto la busqueda para cargar las cia de la base de datos
-searchCia(urlAllCia);
+searchCia(urlAllDataCia);
 //LISTENERS
 CIASEARCHBTN.addEventListener('click', () => searchCia(urlCIA, NAME.value))
 NAME.addEventListener("keypress", doSearchCia)
 UPDATECIABT.addEventListener('click', updateCia);
 CANCELCIABTN.addEventListener('click', cancelBTN)
 NEWCIABTN.addEventListener('click', formNewCia)
+ciaCountry.addEventListener('change', popUpCity)

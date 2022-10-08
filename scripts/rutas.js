@@ -6,9 +6,12 @@ export const rutas = {
     urlCOUNRTY: `http://${HOST}:${PORT}/country/countries`,
     urlCITYBYCOUNTRY: `http://${HOST}:${PORT}/cities/citybycountry/`,
     url1Country: `http://${HOST}:3010/country/country`,
+    url1CountryByRegion: `http://${HOST}:3010/country/countrybyregion/`,
     urlRegion: `http://${HOST}:3010/geo/region`,
+    urlALLRegion: `http://${HOST}:3010/geo/all`,
 
     urlAllCia: `http://${HOST}:3010/company/cia/companies`,
+    urlAllDataCia: `http://${HOST}:3010/company/cia/allcompanies`,
     urlLogin: `http://${HOST}:${PORT}/admin/login`,
     urlUSER: `http://${HOST}:${PORT}/api/user/login`,
 

@@ -63,7 +63,7 @@ h2 {
   z-index: 100;
   left: 5vw;
   top: 5vw;
-  width: 700px;
+  width: 830px;
   height: 290px;
   background-color: #f5a3a3;
   border: 1px black;
@@ -170,5 +170,9 @@ h2 {
 
 .rowCheked {
   background-color: lightgray;
+}
+
+#createContactFormContainer {
+  padding: 0 15px;
 }
 /*# sourceMappingURL=style.css.map */
