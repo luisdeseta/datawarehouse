@@ -19,8 +19,35 @@ const INTERESARROW = document.querySelector('#interestArrow');
 
 
 
-//constantes formulario de actuliacion de contacto
+//constantes formulario de actualicion de contacto
+const contactID = document.querySelector('#contactID');
+const contactNameForm = document.querySelector('#contactNameForm');
+const conctactLastNameForm = document.querySelector('#conctactLastNameForm');
+const jobTitleForm = document.querySelector('#jobTitleForm');
+const emailContact = document.querySelector('#emailContact');
+const ciaContact = document.querySelector('#ciaContact');
+const cityContactSelect = document.querySelector('#cityContactSelect');
+const contactDirInput = document.querySelector('#contactDirInput');
+const interestContact = document.querySelector('#interestContact');
+const createContactForm = document.querySelector('#createContactForm');
+const Contactupdate = document.querySelector('#Contactupdate');
+const regionContactSelect = document.querySelector('#regionContactSelect');
+const paisContactSelect = document.querySelector('#paisContactSelect');
+const phone = document.querySelector('#phone');
+const phonePref = document.querySelector('#phonePref');
+const email = document.querySelector('#email');
+const emailPref = document.querySelector('#emailPref');
+const whatsapp = document.querySelector('#whatsapp');
+const whatsappPref = document.querySelector('#whatsappPref');
+const facebook = document.querySelector('#facebook');
+const facebookPref = document.querySelector('#facebookPref');
+const twitter = document.querySelector('#twitter');
+const twitterPref = document.querySelector('#twitterPref');
 
+
+const CANCELCONTACTBTN = document.querySelector('#cancelContactbtn');
+const updateContactbtn = document.querySelector('#updateContactbtn');
+const CONTACTFORMCONTAINER = document.querySelector('#contactFormContainer');
 
 //urlfetch
 const urlCONTACT = rutas.urlCONTACT;
@@ -28,7 +55,11 @@ const urlALLCONTACT = rutas.urlALLCONTACT;
 const urlCONTACTGEO = rutas.urlCONTACTGEO;
 const urlCONTACTCIA = rutas.urlCONTACTCIA;
 const urlALLCONTACTINFO = rutas.urlALLCONTACTINFO;
-
+const urlALLCITY = rutas.urlALLCITY;
+const urlAllCia = rutas.urlAllCia;
+const urlALLRegion = rutas.urlALLRegion;
+const urlCOUNRTY = rutas.urlCOUNRTY;
+const urlcontactChannelByContact = rutas.urlcontactChannelByContact;
 
 
 
@@ -74,13 +105,6 @@ const searchContact = (url, method, search = "", key) => {
             array = sortBy(array, key)
             return array
         })
-        /*         .then(function (array) {
-                    array = sortBy(array, key)
-                    //_.orderBy(array, "first_name", "desc")
-                    //array.sort(sortBy(key))
-                    console.log("array => ", array)
-                    return array
-                }) */
         .then(function (array) {
             let element = "";
             for (let e = 0; e < array.length; e++) {
@@ -114,8 +138,11 @@ const searchContact = (url, method, search = "", key) => {
 
                 //Seleccionar input[type="checkbox"]
                 selectContactBTN.addEventListener('click', function () {
-                    console.log(`check-${array[i].id}`),
-                        toggleOne(`check-${array[i].id}`)
+                    //console.log("array ", array)
+                    //console.log(`check-${array[i].id}`),
+                    toggleOne(`check-${array[i].id}`)
+
+
                 })
 
                 //Borrar
@@ -124,31 +151,89 @@ const searchContact = (url, method, search = "", key) => {
                 updateContactBTN.addEventListener('click',
                     function () {
                         //alert(array[i].city_id)
-                        //CIAFORMCONTAINER.style.display = "flex";
+                        CONTACTFORMCONTAINER.style.display = "flex";
                         setValueContact(
-                            i,
+                            array[i].id,
                             array[i].first_name,
                             array[i].last_name,
-                            array[i].email,
-                            array[i]["city.country.name"],
-                            array[i]["company.name"],
                             array[i].job_title,
-                            array[i].interest,
-                            array[i].id,
-                        );
-                    });
-                //Establecer valor de la base de datos para el dropdown de interes. Solo en el form de editar contacto
-                //https://www.geeksforgeeks.org/how-to-set-the-value-of-a-select-box-element-using-javascript/
-            }
-        })
+                            array[i].email,
+                            //array[i]["company.id"],
+                            //array[i].city_id,
+                            array[i].address,
+                            //array[i].interest,
 
+                        );
+                        //establece los valores del popup (select).
+                        $("#interestContact").val(array[i].interest);
+                        $("#ciaContact").val(array[i].company_id);
+                        $("#regionContactSelect").val(array[i]["city.country.regions_id"]);
+                        $("#paisContactSelect").val(array[i]["city.country.id"]);
+                        $("#cityContactSelect").val(array[i].city_id)
+                        //establece los valores de las preferencias de contacto/channels
+                        contactChannels(array[i].id, 1, phone, phonePref);
+                        contactChannels(array[i].id, 2, email, emailPref);
+                        contactChannels(array[i].id, 3, whatsapp, whatsappPref);
+                        contactChannels(array[i].id, 4, facebook, facebookPref);
+                        contactChannels(array[i].id, 5, twitter, twitterPref);
+
+                    });
+                //contactChannels(urlcontactChannelByContact, 'GET', array[i].id, 1)
+            }
+            return array
+        })
 
         .catch((err) => {
             console.log('error searchContact => ', err)
         })
 }
 
+//establece el valor de contact&channels
+const contactChannels = (id, channel, where, wherePref) => {
+    //
+    getdata(urlcontactChannelByContact, 'GET', `${id}/${channel}`)
+        .then((res) => {
+            console.log("res 2 ", res)
+            for (let e = 0; e < res.query.length; e++) {
+                console.log("res.query[e].account ", res.query[e].account)
+                where.setAttribute('value', res.query[e].account)
+                $(wherePref).val(res.query[e].preference)
 
+            }
+
+        })
+        .catch((err) => {
+            console.log('error contactChannels => ', err)
+        })
+
+}
+
+/**
+ * Actualiza un contacto y sus preferencias de contacto/channels
+ */
+const updateContact = () => {
+    //
+    event.preventDefault()
+    const data = {
+        id: contactID.value,
+        first_name: contactNameForm.value,
+        last_name: conctactLastNameForm.value,
+        job_title: jobTitleForm.value,
+        email: emailContact.value,
+        company_id: ciaContact.value,
+        city_id: cityContactSelect.value,
+        address: contactDirInput.value,
+        interest: interestContact.value,
+    }
+    fetchdata(urlCONTACT, 'PUT', data)
+        .then((res) => {
+            console.log("data update contact ", data)
+            //Contactupdate.reset();
+        })
+        .catch((err) => {
+            console.log("err update contact".err)
+        })
+}
 /**
  * Markup. Dibuja el HTML de contacto
  */
@@ -183,12 +268,7 @@ const delContact = (url, id, name) => {
         console.log("eliminación cancelada")
     }
 }
-//actualizar contacto
-const setValueContact = (a, b, c, d, e, f, g, h, i) => {
 
-    //carga el valor en cada campo
-
-}
 
 
 CHECKAll.checked = false;
@@ -257,11 +337,39 @@ function deleteSelection(url, ids) {
     }
 }
 
+/**
+ * Setea los valores del boton UPDATE para levantar el form de actualización
+ */
+const setValueContact = (id, name, last_name, job, email, address) => {
+    //const listToUpdate = JSON.parse(sessionStorage.getItem("ciaList"));
+    //console.log("listToUpdate  ", listToUpdate[order]);
 
+    //carga el valor en cada campo
+    contactID.setAttribute('value', id)
+    contactNameForm.setAttribute('value', name)
+    conctactLastNameForm.setAttribute('value', last_name)
+    jobTitleForm.setAttribute('value', job)
+    emailContact.setAttribute('value', email)
+    //Cia y City lo setea en la resolución de la Promise
+    //ciaContact.setAttribute('value', cia)
+    //cityContactSelect.setAttribute('value', city)
+    contactDirInput.setAttribute('value', address)
+    //interestContact.setAttribute('value', interest)
+
+};
+/**
+ * Actualizar Contacto
+ */
+
+/**
+ * Cierra el modal sin guardar los cambios
+ */
+const cancelBTN = () => {
+    CONTACTFORMCONTAINER.style.display = "none";
+}
 /**
  *  Markup checkboxes seleccionadas
  */
-
 const MarkupCheckBoxes = (length) => {
     return `
     <p class="checkAction">${length} Seleccionados</p>
@@ -273,14 +381,57 @@ const MarkupCheckBoxes = (length) => {
 function newContact() {
     window.location.href = '../pages/newcontact.html'
 }
+//consulta para el popup de City
+const forPopUpCity = (url, search = "", where) => {
+    const array = []
+    getdata(url, 'GET', search)
+        .then((res) => {
+            //Sirve para cuando el pais no tiene ciudades cargas
+
+            let element = "";
+            for (let i = 0; i < res.query.length; i++) {
+                array.push(res.query[i]);
+
+            }
+            //array.unshift({ id: 9999999, regions_id: 9999999, name: "-- Selecionar --" })
+            //console.log("array ", array)
+            for (let e = 0; e < array.length; e++) {
+                element += markUpAny(
+                    array[e].id,
+                    array[e].name
+                );
+            }
+            where.innerHTML = element
+
+        })
+        .catch((err) => {
+            console.log('err ', err)
+        })
+}
+//DIBUJAR EL HTML DE CITY/country/CIA  
+const markUpAny = (ID, Name) => {
+    return `
+    
+    <option value="${ID}">${Name}</option>
+
+    `
+}
 
 //onload
-searchContact(urlCONTACT, 'GET', `?name=`, "first_name")
+searchContact(urlCONTACT, 'GET', `?name=`, "first_name");
+
+//Dibujo en el HTML:
+//companias
+forPopUpCity(urlAllCia, ``, ciaContact);
+//regiones
+forPopUpCity(urlALLRegion, ``, regionContactSelect);
+//country
+forPopUpCity(urlCOUNRTY, ``, paisContactSelect);
+//ciudades
+forPopUpCity(urlALLCITY, ``, cityContactSelect);
 
 //listenners
 CHECKAll.addEventListener('click', toggle)
-
-
 SEARCHBTN.addEventListener('click', () => searchContact(urlCONTACT, 'GET', `?name=${SEARCHCONTACTVALUE.value}`, "first_name"))
 CONTACTARROW.addEventListener('click', () => searchContact(urlCONTACT, 'GET', `?name=${SEARCHCONTACTVALUE.value}`, "first_name"));
 REGIONARRROW.addEventListener('click', () => searchContact(urlCONTACT, 'GET', `?name=${SEARCHCONTACTVALUE.value}`, "city.country.name"));
@@ -289,3 +440,5 @@ JOBARROW.addEventListener('click', () => searchContact(urlCONTACT, 'GET', `?name
 INTERESARROW.addEventListener('click', () => searchContact(urlCONTACT, 'GET', `?name=${SEARCHCONTACTVALUE.value}`, "interest"));
 ADDCONTACTBTN.addEventListener('click', newContact)
 TRASHCONTAINER.addEventListener('click', () => { deleteSelection(urlCONTACT, arrayTR) })
+CANCELCONTACTBTN.addEventListener('click', cancelBTN)
+updateContactbtn.addEventListener('click', updateContact)

@@ -15,6 +15,17 @@ const emailContact = document.querySelector('#emailContact');
 const contactDirInput = document.querySelector('#contactDirInput');
 const interestContact = document.querySelector('#interestContact');
 const createContactForm = document.querySelector('#createContactForm');
+//constantes creacion de channelsContacts
+const phone = document.querySelector('#phone');
+const email = document.querySelector('#email');
+const whatsapp = document.querySelector('#whatsapp');
+const facebook = document.querySelector('#facebook');
+const twitter = document.querySelector('#twitter');
+const phonePref = document.querySelector('#phonePref');
+const emailPref = document.querySelector('#emailPref');
+const whatsappPref = document.querySelector('#whatsappPref');
+const facebookPref = document.querySelector('#facebookPref');
+const twitterPref = document.querySelector('#twitterPref');
 
 //url fetch
 const urlAllCia = rutas.urlAllCia
@@ -24,12 +35,13 @@ const urlCITYBYCOUNTRY = rutas.urlCITYBYCOUNTRY
 const urlALLRegion = rutas.urlALLRegion
 const url1CountryByRegion = rutas.url1CountryByRegion
 const urlCONTACT = rutas.urlCONTACT
+const urlcontactChannelsBulk = rutas.urlcontactChannelsBulk
 
 /**
  * Agrega un contacto
  * @param {*} params 
  */
-function addContact(params) {
+function addContact() {
     event.preventDefault()
     const data = {
         first_name: contactNameForm.value,
@@ -45,14 +57,74 @@ function addContact(params) {
         .then((res) => {
             alert(res.Mensaje)
             console.log(res);
-            createContactForm.reset();
+            //createContactForm.reset();
+            newContactID = res.newContact
+        })
+        .then((res) => {
+            //agrego los canales para el contacto
+            addContactChannel()
         })
         .catch((err) => {
-            console.log("err create CIA", err)
+            console.log("err create contact", err)
         })
 }
 
-//Consulta el listado de city
+let newContactID = false
+/**
+ * Agregar Canales a un contacto
+ */
+function addContactChannel() {
+    //
+    console.log("newContactID ", newContactID)
+    const data = [
+        {
+            contacts_id: newContactID,
+            channels_id: 1, //Telefono
+            account: phone.value,
+            preference: phonePref.value
+        },
+        {
+            contacts_id: newContactID,
+            channels_id: 2, //email
+            account: email.value,
+            preference: emailPref.value
+        },
+        {
+            contacts_id: newContactID,
+            channels_id: 3, //whatsapp
+            account: whatsapp.value,
+            preference: whatsappPref.value
+        },
+        {
+            contacts_id: newContactID,
+            channels_id: 4, //facebook
+            account: facebook.value,
+            preference: facebookPref.value
+        },
+        {
+            contacts_id: newContactID,
+            channels_id: 5, //twitter
+            account: twitter.value,
+            preference: twitterPref.value
+        }
+    ]
+
+    fetchdata(urlcontactChannelsBulk, 'POST', data)
+        .then((res) => {
+            console.log(res);
+        })
+        .catch((err) => {
+            console.log("err contact channerls ", err)
+        })
+
+}
+
+/**
+ * Consulta una tabla para traer los datos del SELECT
+ * @param {*} url Endpoint para obtener los datos de la tabla
+ * @param {*} search Criterio de busqueda. Opcional
+ * @param {*} where Lugar donde se dibujaran los datos
+ */
 const forPopUp = (url, search = "", where) => {
     const array = []
     getdata(url, 'GET', search)
@@ -69,6 +141,7 @@ const forPopUp = (url, search = "", where) => {
                     array.push(res.query[i]);
 
                 }
+                array.unshift({ id: 9999999, regions_id: 9999999, name: "-- Selecionar --" })
                 for (let e = 0; e < array.length; e++) {
                     element += markUpAny(
                         array[e].id,
@@ -76,7 +149,7 @@ const forPopUp = (url, search = "", where) => {
                     );
 
                 }
-                element += "<option selected>Selecionar</option>"
+                //element += "<option selected>Selecionar</option>"
                 where.innerHTML = element
 
             }
@@ -113,6 +186,6 @@ function popUpCity() {
 }
 
 //Listenner
-createContactbtn.addEventListener('click', addContact)
+createContactbtn.addEventListener('click', () => { addContact() })
 regionContactSelect.addEventListener('change', popUpCountry)
 paisContactSelect.addEventListener('change', popUpCity)

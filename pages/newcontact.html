@@ -101,7 +101,7 @@
               <div class="col-md-2">
                 <label for="contactInterest" class="form-label">Interes</label>
                 <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example" id="interestContact">
-                    <option selected>Seleccionar Interes</option>
+                    <option value="0" selected>Seleccionar Interes</option>
                     <option value="0">0</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
@@ -109,28 +109,115 @@
                   </select>
               </div>
               <br>
-            <div class="col-md-2">
-              <label for="contactChannel" class="form-label">Canal de Contacto</label>
-              <input type="text" class="form-control" id="contactChannel" placeholder="Canal" autocomplete="off">
-            </div>
-            <div class="col-md-2">
-              <label for="channel" class="form-label">Cuenta de Usuario</label>
-              <input type="text" class="form-control" id="channel" placeholder="Cuenta de usuario" autocomplete="off">
-            </div>
-            <div class="col-md-2">
-              <label for="preference" class="form-label">Preferencia</label>
-              <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example" id="preference">
-                  <option selected>Seleccionar</option>
-                  <option value="1">0</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
+              <!--   Canales de contacto -->
+        <div class="row g-3 channelContainer">
+              <div class="col-md-2">
+                <label for="contactChannel1" class="form-label">Canal de Contacto</label>
+                <br>
+                <label class="form-label">Teléfono</label>
+               <!--  <input type="text" class="form-control"  placeholder="Canal" autocomplete="off" id="contactChannel1" value="Telefono" > -->
+              </div>
+              <div class="col-md-2">
+                <label for="phone" class="form-label">Cuenta de Usuario</label>
+                <input type="text" class="form-control"  placeholder="Cuenta de usuario" autocomplete="off" id="phone">
+              </div>
+              <div class="col-md-2">
+                <label for="preference1" class="form-label">Preferencia</label>
+                <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example" id="phonePref">
+                    <option value="0" selected>Seleccionar</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
                 </select>
+<!--               </div>
+                          <div class="col-md-2" id="createCha1">
+                <label class="form-label blacklabel">Agregar Canal</label>
+                <button type="submit" class="btn btn-primary" id="createCha1" >Agregar Canal</button>
+              </div> -->
+            
+        </div>
+          <!--   Canales de contacto -->
+          <div class="row g-3 channelContainer">
+            <div class="col-md-2">
+              <label class="form-label">Email</label>
+              <!-- <input type="text" class="form-control"  placeholder="Canal" autocomplete="off" id="contactChannel2"> -->
             </div>
-            <div class="col-md-4"></div>
+            <div class="col-md-2">
+              <input type="text" class="form-control"  placeholder="Cuenta de usuario" autocomplete="off" id="email">
+            </div>
+            <div class="col-md-2">
+              <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example" id="emailPref">
+                  <option value="0" selected>Seleccionar</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+              </select>
+
           
-            <div class="col-12" id="btnContainer">
-            <button type="submit" class="btn btn-primary" id="createContactbtn" >Crear nuevo Contacto</button>
-            </div>
+      </div>
+      <!--   Canales de contacto -->
+      <div class="row g-3 channelContainer">
+        <div class="col-md-2">
+          <label class="form-label">Whatsapp</label>
+         <!--  <input type="text" class="form-control"  placeholder="Canal" autocomplete="off" id="contactChannel3"> -->
+        </div>
+        <div class="col-md-2">
+          <input type="text" class="form-control"  placeholder="Cuenta de usuario" autocomplete="off" id="whatsapp">
+        </div>
+        <div class="col-md-2">
+          <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example" id="whatsappPref">
+              <option value="0"  selected>Seleccionar</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+          </select>
+        </div>
+        
+
+      </div>
+            <!--   Canales de contacto -->
+            <div class="row g-3 channelContainer">
+              <div class="col-md-2">
+                <label class="form-label">Facebook</label>
+                <!-- <input type="text" class="form-control"  placeholder="Canal" autocomplete="off" id="contactChannel4"> -->
+              </div>
+              <div class="col-md-2">
+                <input type="text" class="form-control"  placeholder="Cuenta de usuario" autocomplete="off" id="facebook">
+              </div>
+              <div class="col-md-2">
+                <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example" id="facebookPref">
+                    <option value="0"  selected>Seleccionar</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+              </div>
+          
+
+               <!--   Canales de contacto -->
+      <div class="row g-3 channelContainer">
+        <div class="col-md-2">
+          <label class="form-label">Twitter</label>
+<!--           <input type="text" class="form-control"  placeholder="Canal" autocomplete="off" id="contactChannel5"> -->
+        </div>
+        <div class="col-md-2">
+          <input type="text" class="form-control"  placeholder="Cuenta de usuario" autocomplete="off" id="twitter">
+        </div>
+        <div class="col-md-2">
+          <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example" id="twitterPref">
+              <option value="0" selected>Seleccionar</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+          </select>
+        </div>
+    
+    
+     
+
+        <div class="col-12" id="btnContainer">
+        <button type="submit" class="btn btn-primary" id="createContactbtn" >Crear nuevo Contacto</button>
+        </div>
             
       </div>
   </form>

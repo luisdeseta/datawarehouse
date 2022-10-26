@@ -43,7 +43,7 @@ const ContChannels = sequelize.define("contact_channels", {
 )
 
 //crear contact_channels
-cont_channels.post('/create', async (req, res) => {
+cont_channels.post('/contactchannels', async (req, res) => {
     //Verificar si el contact_channels existe
     /* const verifyContact = await ContChannels.findAll({
         where: { contacts_id: req.body.contacts_id }
@@ -62,8 +62,59 @@ cont_channels.post('/create', async (req, res) => {
         console.log("Contact & Channels error", error)
     }
 })
-//buscar un contacto
-cont_channels.get('/get/:ID', async (req, res) => {
+
+//crear bulk contact_channels
+cont_channels.post('/contactchannels/creates', async (req, res) => {
+    //Verificar si el contact_channels existe
+    /* const verifyContact = await ContChannels.findAll({
+        where: { contacts_id: req.body.contacts_id }
+    })
+    if (verifyContact.length != 0) return res.status('403').json({ mensaje: `${req.body.contacts_id} ya existe` }) */
+
+    try {
+        const newContact = await ContChannels.bulkCreate(
+            [{
+                contacts_id: req.body[0].contacts_id,
+                channels_id: req.body[0].channels_id,
+                account: req.body[0].account,
+                preference: req.body[0].preference
+            },
+            {
+                contacts_id: req.body[1].contacts_id,
+                channels_id: req.body[1].channels_id,
+                account: req.body[1].account,
+                preference: req.body[1].preference
+            },
+            {
+                contacts_id: req.body[2].contacts_id,
+                channels_id: req.body[2].channels_id,
+                account: req.body[2].account,
+                preference: req.body[2].preference
+            },
+            {
+                contacts_id: req.body[3].contacts_id,
+                channels_id: req.body[3].channels_id,
+                account: req.body[3].account,
+                preference: req.body[3].preference
+            },
+            {
+                contacts_id: req.body[4].contacts_id,
+                channels_id: req.body[4].channels_id,
+                account: req.body[4].account,
+                preference: req.body[4].preference
+            }
+            ])
+
+        //console.log("newContacts", newContact)
+        res.status(200).json({ Mensaje: `Contactos & Channels creados con éxito` })
+    } catch (error) {
+        res.json({ error });
+        console.log("Contact & Channels error", error)
+    }
+})
+
+//buscar un contacto&canal
+cont_channels.get('/contactchannels/:ID', async (req, res) => {
     try {
         const { ID } = req.params;
         const query = await ContChannels.findAll({
@@ -81,6 +132,29 @@ cont_channels.get('/get/:ID', async (req, res) => {
         console.log("error  ", error)
     }
 })
+//buscar un contacto&canal por ID de contacto
+cont_channels.get('/contactchannels/contact/:ID/:CHANNEL', async (req, res) => {
+    try {
+        const { ID, CHANNEL } = req.params;
+        const query = await ContChannels.findAll({
+            where: {
+                contacts_id: [ID],
+                channels_id: [CHANNEL]
+            }
+        })
+        console.log(query)
+        if (query.length == 0) return res.status('403').json({ mensaje: `${ID} no tiene datos` })
+        res.status(200).json({
+            query
+        })
+
+
+    } catch (error) {
+        res.json({ error })
+        console.log("error  ", error)
+    }
+})
+
 //buscar todos los contactos
 cont_channels.get('/getall', async (req, res) => {
     try {
@@ -95,7 +169,7 @@ cont_channels.get('/getall', async (req, res) => {
 })
 
 //actualizar contactos
-cont_channels.put('/update', async (req, res) => {
+cont_channels.put('/contactchannels', async (req, res) => {
     try {
         //verificar duplicados
         const verifyContact = await ContChannels.findAll({
@@ -118,8 +192,8 @@ cont_channels.put('/update', async (req, res) => {
     }
 })
 
-//eliminar contactos
-cont_channels.delete('/delete/:id', async (req, res) => {
+//eliminar contactos&canales
+cont_channels.delete('/contactchannels/:id', async (req, res) => {
     //
     try {
         const { id } = req.params

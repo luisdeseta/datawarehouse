@@ -26,6 +26,11 @@ export const rutas = {
     //Trae todos los datos en un ARRAY  objeto para mostrar todo el front:
     urlALLCONTACTINFO: `http://${HOST}:${PORT}/contact/allcontactinfo/`,
 
+    urlcontactChannels: `http://${HOST}:${PORT}/contactandchannels/`,
+    //bulkcreate para varios canales
+    urlcontactChannelsBulk: `http://${HOST}:${PORT}/contactandchannels/contactchannels/creates`,
+    urlcontactChannelByContact: `http://${HOST}:${PORT}/contactandchannels/contactchannels/contact/`,
+
 
     test: `http://${HOST}:${PORT}/tree/allzz/`,
 }

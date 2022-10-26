@@ -97,7 +97,7 @@ contact.post('/contact', async (req, res) => {
             address: req.body.address,
             interest: req.body.interest
         })
-        res.status(200).json({ Mensaje: `Contacto ${newContact.email} creado con éxito` })
+        res.status(200).json({ Mensaje: `Contacto ${newContact.email} creado con éxito`, newContact: newContact.id })
     } catch (error) {
         res.json({ error });
         console.log("Contact error", error)
@@ -200,9 +200,9 @@ contact.put('/contact', async (req, res) => {
     try {
         //verificar duplicados
         const query = await Contact.findAll({
-            where: { first_name: req.body.first_name }
+            where: { email: req.body.email }
         })
-        if (query == 0) return res.status('403').json({ mensaje: `${req.body.first_name} no existe` })
+        if (query == 0) return res.status('403').json({ mensaje: `${req.body.email} no existe` })
 
         await Contact.update({
             first_name: req.body.first_name,

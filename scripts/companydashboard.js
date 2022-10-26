@@ -70,7 +70,7 @@ const forPopUp = (url, search = "", where) => {
                     array.push(res.query[i]);
 
                 }
-                //array.unshift({ id: 9999999, regions_id: 9999999, name: "-- Selecionar --" })
+                array.unshift({ id: 9999999, regions_id: 9999999, name: "-- Selecionar --" })
                 //console.log("array ", array)
                 for (let e = 0; e < array.length; e++) {
                     element += markUpAny(

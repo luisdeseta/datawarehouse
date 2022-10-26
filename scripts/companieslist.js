@@ -77,7 +77,7 @@ const searchCia = (url, search = "") => {
                             array[i].email,
                             array[i].phone,
                         );
-                        //forPopUpCity(urlALLCITY, ``, CIACITY)
+                        //establece los valores del popup (select).
                         $("#ciaCountry").val(array[i].city.country_id)
                         $("#ciaCity").val(array[i].city.id)
                     });
@@ -120,7 +120,7 @@ const delCia = (ciaID, name) => {
         deldata(urlCIA, 'DELETE', ciaID)
             .then((res) => {
                 console.log('res ', res)
-                searchCia(urlAllCia);
+                searchCia(urlAllDataCia);
             })
             .catch((err) => {
                 console.log('error del cia ', err)
