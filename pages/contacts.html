@@ -16,7 +16,7 @@
           <a class="nav-link active" aria-current="page" href="./contacts.html">Contactos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="./userslist.html">Usuarios</a>
+          <a class="nav-link active" aria-current="page" id="userDiv" href="./userslist.html">Usuarios</a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="./companieslist.html">Compañías</a>
@@ -171,7 +171,7 @@
             <div class="col-md-2">
               <label for="contactInterest" class="form-label">Interes</label>
               <select class="form-select form-select-m mb-3" aria-label=".form-select-sm example" id="interestContact">
-                  <option value="0" selected>Seleccionar Interes</option>
+                  <option value="9" selected>Seleccionar Interes</option>
                   <option value="0">0</option>
                   <option value="25">25</option>
                   <option value="50">50</option>
@@ -189,7 +189,7 @@
             </div>
             <div class="col-md-2">
               <label for="phone" class="form-label">Cuenta de Usuario</label>
-              <input type="text" class="form-control"  placeholder="Cuenta de usuario" autocomplete="off" id="phone">
+              <input type="text" class="form-control"  placeholder="Cuenta de usuario" autocomplete="off" id="phone" name="">
             </div>
             <div class="col-md-2">
               <label for="preference1" class="form-label">Preferencia</label>
@@ -287,7 +287,7 @@
 
       <div class="col-12" id="btnContainer">
         <button type="submit" class="btn btn-primary" id="cancelContactbtn" >Cancelar</button>
-        <button type="submit" class="btn btn-primary" id="updateContactbtn" >Actualizar Contacto</button>
+        <button type="submit" class="btn btn-primary" id="updateContactbtn" >Actualizar</button>
       </div>
           
     </div>
@@ -297,7 +297,7 @@
   </div>
 <!-- Fin formulario Actualización Contacto -->
 
-          <script type="module" src="../scripts/contactslist.js"></script>
+          <script type="module" src="../frontend/contactslist.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
           <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>   

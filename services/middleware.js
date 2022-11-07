@@ -3,7 +3,7 @@ const { header } = require("express/lib/request");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const { Sequelize, DataTypes, Model, QueryTypes, Op } = require('sequelize');
-const { User } = require('../routes/users');
+const { User } = require('../backend/users');
 
 
 /**
@@ -37,17 +37,17 @@ const validateToken = async (req, res, next) => {
 };
 
 /**
- * TODO
- * Validar usuario
- * Validar Admin para rutas protegidas
+ * 
+ * Valida Admin para rutas protegidas
  */
 const isAdmin = (req, res, next) => {
   if (req.userProfile.profile == "A") {
+
     return next();
 
   }
   return res.status(201).send({
-    message: "Usuario sin autorización"
+    message: "¡¡Usuario sin autorización!!"
   })
 };
 
@@ -88,20 +88,6 @@ const validateLogin = async (req, res, next) => {
   req.userLogin = userLogin;
   next();
 }
-const validateLogin1 = async (req, res, next) => {
-  //busco por email
-  const userLogin = await User.findAll({
-    where: {
-      [Op.or]: [{ email: req.body.usuario }, { first_name: req.body.usuario }]
-    }
 
-  });
-  //Valido pass
-  const userPass = await bcrypt.compare(req.body.pass, userLogin[0].password);
-  if (!userPass) return res.status(400).json({ Mensaje: "Email o password incorrecto!!" });
-  console.log('userPass ' + userPass);
-  req.userLogin = userLogin;
-  next();
-}
 
 module.exports = { isAdmin, validateToken, validateLogin, isUser };

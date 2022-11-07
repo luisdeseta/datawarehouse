@@ -10,11 +10,11 @@ const req = require('express/lib/request');
 const expJWT = expressJwt({ secret: process.env.SECRET_TOKEN, algorithms: ['HS512'] });
 
 //importo los modelos
-const { region_route, Region } = require('../routes/region');
-const { country_route, Country } = require('../routes/country');
-const { city_route, City } = require('../routes/city');
-const { Company } = require('../routes/company');
-const { ContChannels } = require('../routes/contactChannels');
+const { region_route, Region } = require('../backend/region');
+const { country_route, Country } = require('../backend/country');
+const { city_route, City } = require('../backend/city');
+const { Company } = require('../backend/company');
+const { ContChannels } = require('../backend/contactChannels');
 const bodyParser = require('body-parser');
 
 //usar contact para las rutas de contactos.

@@ -5,9 +5,9 @@ const { Sequelize, DataTypes, Model, QueryTypes, Op } = require('sequelize');
 const req = require('express/lib/request');
 
 //importo los modelos
-const { region_route, Region } = require('../routes/region');
-const { country_route, Country } = require('../routes/country');
-const { city_route, City } = require('../routes/city');
+const { region_route, Region } = require('../backend/region');
+const { country_route, Country } = require('../backend/country');
+const { city_route, City } = require('../backend/city');
 const bodyParser = require('body-parser');
 
 
@@ -90,4 +90,4 @@ route_tree.get('/alltest', async (req, res) => {
 
 
 })
-module.exports = { route_tree }
+module.exports = { route_tree, Region, Country, City }

@@ -138,6 +138,16 @@
    }
  }
 
+ //la seccion usuario permance oculta para todos, excepto para Admin
+ #userDiv {
+   display: none;
+ }
+
+ //Contactos seleccionados.
+ #contactSelect {
+   display: none;
+ }
+
  #addBTNContainer {
    padding: 0 10px 10px 0;
  }

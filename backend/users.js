@@ -37,26 +37,7 @@ const User = sequelize.define("users", {
     { timestamps: false, }
 )
 
-//Crear el usuario admin
-//TODO poner un IF para no crear infinitos admin
-router.post('/createadmin', async (req, res) => {
-    try {
-        const salt = await bcrypt.genSalt(10);
-        const admin = await User.create({
-            first_name: 'admin',
-            last_name: 'admin',
-            email: 'admin@email.com.ar',
-            password: await bcrypt.hash('admin123', salt),
-            profile: 'A'
-        })
-        res.json({ Mensaje: `Usuario ${admin.email} creado con éxito` });
 
-    } catch (error) {
-        res.json(`Èrror ${error}`);
-    }
-
-
-})
 
 //login de usuarios
 router.post('/user/login', async (req, res) => {

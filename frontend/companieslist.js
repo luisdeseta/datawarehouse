@@ -1,5 +1,5 @@
-import { fetchdata, getdata, deldata } from '../routes/fetchdata.js';
-import { rutas } from '../scripts/rutas.js';
+import { fetchdata, getdata, deldata, hideContact } from '../backend/fetchdata.js';
+import { rutas } from '../frontend/rutas.js';
 
 //constantes
 const NAME = document.querySelector('#nameCia');
@@ -7,7 +7,7 @@ const CIASEARCHBTN = document.querySelector('#searchCiabtn');
 const USERFORMUPDATE = document.querySelector('#UserFormUpdate');
 const CIAFORMCONTAINER = document.getElementById('ciaFormContainer');
 const NEWCIABTN = document.querySelector('#newCiabtn');
-
+const userDiv = document.querySelector('#userDiv');
 //constantes form creación actualización de cia
 const ID = document.querySelector('#id');
 const CIANAMEUPDATE = document.querySelector('#ciaNameForm');
@@ -301,7 +301,8 @@ const markUpCity = (ID, Name) => {
 //ejecuto el popup de country
 forPopUp(urlCOUNRTY, "", ciaCountry)
 forPopUpCity(urlALLCITY, ``, CIACITY)
-
+//oculta la seccion de usuarios
+hideContact(userDiv)
 //popup de city
 function popUpCity() {
     const countryID = ciaCountry.value

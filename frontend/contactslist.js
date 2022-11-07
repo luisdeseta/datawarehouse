@@ -1,5 +1,5 @@
-import { fetchdata, getdata, getdata2, deldata } from '../routes/fetchdata.js';
-import { rutas } from '../scripts/rutas.js';
+import { fetchdata, getdata, getdata2, deldata, hideContact } from '../backend/fetchdata.js';
+import { rutas } from '../frontend/rutas.js';
 
 
 //constantes
@@ -8,8 +8,10 @@ const SEARCHBTN = document.querySelector('#searchContactBTN');
 const CONTACTTABLE = document.querySelector('#contactTable');
 const CHECKAll = document.querySelector('#checkAll');
 const checkSelected = document.querySelector('#checkSelected');
-const TRASHCONTAINER = document.querySelector('#trashContainer')
+const TRASHCONTAINER = document.querySelector('#trashContainer');
 const ADDCONTACTBTN = document.querySelector('#addContactBTN');
+const contactSelect = document.querySelector('#contactSelect');
+const userDiv = document.querySelector('#userDiv');
 //constantes order by
 const CONTACTARROW = document.querySelector('#contactArrow');
 const REGIONARRROW = document.querySelector('#regionArrow');
@@ -60,7 +62,7 @@ const urlAllCia = rutas.urlAllCia;
 const urlALLRegion = rutas.urlALLRegion;
 const urlCOUNRTY = rutas.urlCOUNRTY;
 const urlcontactChannelByContact = rutas.urlcontactChannelByContact;
-
+const urlcontactChannels = rutas.urlcontactChannels;
 
 
 let status = true;
@@ -193,10 +195,11 @@ const contactChannels = (id, channel, where, wherePref) => {
     //
     getdata(urlcontactChannelByContact, 'GET', `${id}/${channel}`)
         .then((res) => {
-            console.log("res 2 ", res)
+            //console.log("res 2 ", res)
             for (let e = 0; e < res.query.length; e++) {
-                console.log("res.query[e].account ", res.query[e].account)
+                //console.log("res.query[e].account ", res.query[e].account)
                 where.setAttribute('value', res.query[e].account)
+                where.setAttribute('name', res.query[e].id)
                 $(wherePref).val(res.query[e].preference)
 
             }
@@ -228,10 +231,68 @@ const updateContact = () => {
     fetchdata(urlCONTACT, 'PUT', data)
         .then((res) => {
             console.log("data update contact ", data)
-            //Contactupdate.reset();
+        })
+        .then(() => {
+            updateContacChannel()
+            Contactupdate.reset();
+            CONTACTFORMCONTAINER.style.display = "none";
+            searchContact(urlCONTACT, 'GET', `?name=`, "first_name");
+
         })
         .catch((err) => {
-            console.log("err update contact".err)
+            console.log("err update contact", err)
+        })
+}
+
+/**
+ * Actualiza los contact&channels
+ * 
+ */
+const updateContacChannel = () => {
+    //
+    const data = [
+        {
+            id: phone.name,
+            contacts_id: contactID.value,
+            channels_id: 1, //Telefono
+            account: phone.value,
+            preference: phonePref.value
+        },
+        {
+            id: email.name,
+            contacts_id: contactID.value,
+            channels_id: 2, //email
+            account: email.value,
+            preference: emailPref.value
+        },
+        {
+            id: whatsapp.name,
+            contacts_id: contactID.value,
+            channels_id: 3, //whatsapp
+            account: whatsapp.value,
+            preference: whatsappPref.value
+        },
+        {
+            id: facebook.name,
+            contacts_id: contactID.value,
+            channels_id: 4, //facebook
+            account: facebook.value,
+            preference: facebookPref.value
+        },
+        {
+            id: twitter.name,
+            contacts_id: contactID.value,
+            channels_id: 5, //twitter
+            account: twitter.value,
+            preference: twitterPref.value
+        }
+    ]
+    fetchdata(urlcontactChannels, 'PUT', data)
+        .then((res) => {
+            console.log("data udpdate contactChannels ", data)
+        })
+        .catch((err) => {
+            console.log("err update contactChannels", err)
         })
 }
 /**
@@ -240,7 +301,7 @@ const updateContact = () => {
 const markUpSearch = (order, first_name, last_name, email, country, region, company, job_title, interest, id) => {
     return `
     <tr class="td">
-    <td><input type="checkbox" id="check-${id}" name="${id}"></td>
+    <td><input type="checkbox" id="check-${id}" name="${id}" class="checkRow"></td>
     <td>${first_name} ${last_name}<div class="insideText" >${email}</div></td>
     <td>${country} <div class="insideText" >${region}</div></td>
     <td>${company}</td>
@@ -279,6 +340,7 @@ let check = true;
  * 
  */
 function toggle() {
+    arrayTR = [] //vacio el arrayTR para no generar un length erroneo
     check = !check
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     if (!!check) {
@@ -288,7 +350,8 @@ function toggle() {
         }
         arrayTR = []
         //TODO cambiar el inner y sacar "seleccionados"
-        checkSelected.innerHTML = MarkupCheckBoxes(arrayTR.length)
+        checkSelected.innerHTML = MarkupCheckBoxes(arrayTR.length);
+        contactSelect.style.display = "none";
     }
     else {
         for (let i = 0; i < checkboxes.length; i++) {
@@ -299,6 +362,7 @@ function toggle() {
         //quito el checkboxALL
         arrayTR.shift()
         checkSelected.innerHTML = MarkupCheckBoxes(arrayTR.length)
+        contactSelect.style.display = "flex";
     }
 
 
@@ -308,13 +372,22 @@ function toggleOne(item) {
     //check = !check
     const object = document.getElementById(`${item}`)
     if (object.checked == true) {
+        //agrega un contador
         object.checked = true
         arrayTR.push(object.name)
         checkSelected.innerHTML = MarkupCheckBoxes(arrayTR.length)
+        console.log("arrayTR length ", arrayTR.length)
+        contactSelect.style.display = "flex";
     } else {
+        //quita un contador
         object.checked = false
         _.pull(arrayTR, object.name)
         checkSelected.innerHTML = MarkupCheckBoxes(arrayTR.length)
+        console.log("arrayTR length ", arrayTR.length)
+        if (arrayTR.length == 0) {
+            contactSelect.style.display = "none";
+
+        }
     }
     //console.log(object)
 }
@@ -419,7 +492,8 @@ const markUpAny = (ID, Name) => {
 
 //onload
 searchContact(urlCONTACT, 'GET', `?name=`, "first_name");
-
+//oculta la seccion de usuarios
+hideContact(userDiv)
 //Dibujo en el HTML:
 //companias
 forPopUpCity(urlAllCia, ``, ciaContact);

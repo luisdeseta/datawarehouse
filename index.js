@@ -16,16 +16,16 @@ app.use(express.json());
 
 
 //Importar Rutas
-const auth = require('./routes/auth');
-const { router, User } = require('./routes/users');
-const { region_route, Region } = require('./routes/region');
-const { country_route, Country } = require('./routes/country');
-const { city_route, City } = require('./routes/city');
-const { route_tree } = require('./routes/jstree');
-const { cia_route, Company } = require('./routes/company');
-const { contact } = require('./routes/contacts');
-const { cont_channels } = require('./routes/contactChannels');
-const { channels } = require('./routes/channels');
+const auth = require('./backend/auth');
+const { router, User } = require('./backend/users');
+const { region_route, Region } = require('./backend/region');
+const { country_route, Country } = require('./backend/country');
+const { city_route, City } = require('./backend/city');
+const { route_tree, } = require('./backend/jstree');
+const { cia_route, Company } = require('./backend/company');
+const { contact } = require('./backend/contacts');
+const { cont_channels } = require('./backend/contactChannels');
+const { channels } = require('./backend/channels');
 
 //Middlewares
 const { isAdmin, validateToken, validateLogin, isUser } = require('./services/middleware')
@@ -35,12 +35,12 @@ app.use('/admin', auth);
 app.use('/api', validateToken, isAdmin, router);
 app.use('/geo', region_route);
 app.use('/country', country_route);
-app.use('/cities', validateToken, isUser, city_route);
+app.use('/cities', city_route);
 app.use('/tree', route_tree);
-app.use('/company', cia_route);
-app.use('/contact', contact);
-app.use('/contactandchannels', cont_channels);
-app.use('/channels', channels);
+app.use('/company', validateToken, isUser, cia_route);
+app.use('/contact', validateToken, isUser, contact);
+app.use('/contactandchannels', validateToken, isUser, cont_channels);
+app.use('/channels', validateToken, isUser, channels);
 
 
 //Test

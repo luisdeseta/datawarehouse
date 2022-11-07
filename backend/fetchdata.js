@@ -111,3 +111,15 @@ export const getD = (url, method) => {
         //console.log("fetchdata ", data)
     })
 }
+
+/**
+ * oculta contactos
+ */
+export const hideContact = (divLink) => {
+    //
+    const P = sessionStorage.getItem("p")
+    if (P == "A") {
+        divLink.style.display = 'block';
+
+    }
+}

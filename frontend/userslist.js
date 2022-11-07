@@ -1,5 +1,5 @@
-import { fetchdata, getdata, deldata } from '../routes/fetchdata.js';
-import { rutas } from '../scripts/rutas.js'
+import { fetchdata, getdata, deldata, hideContact } from '../backend/fetchdata.js';
+import { rutas } from '../frontend/rutas.js'
 
 //Constantes
 const NAME = document.querySelector('#name');
@@ -7,6 +7,7 @@ const USERSEARCHBTN = document.querySelector('#searchUserbtn');
 const USERFORMUPDATE = document.querySelector('#UserFormUpdate');
 const FORMCONTAINER = document.getElementById('formContainer');
 const NEWUSERBTN = document.querySelector('#newUserbtn');
+const userDiv = document.querySelector('#userDiv');
 //Constantes form update de usuario
 const ID = document.querySelector('#id');
 const NAMEUPDATE = document.querySelector('#nameForm');
@@ -24,6 +25,7 @@ const FORM = document.querySelector('#theForm')
 //const urlUSER = `http://localhost:3010/api/user/`;
 const urlUSER = rutas.urlUSER;
 const urlALL = rutas.urlALL;
+
 
 /**
  * busca usuarios 
@@ -88,22 +90,22 @@ const searchUser = (url, search = "") => {
 //Markup para dibujar la tabla de usuarios
 const markUpSearch = (order, id, name, last, email, profile) => {
     return `
-    <tr>
-    <td>${order}</td>
-    <td>${id}</td>
-    <td>${name}</td>
-    <td>${last}</td>
-    <td>${email}</td>
-    <td>${profile}</td>
-    <td id="act-${id}"><button class="btn btn-primary me-md-2" type="button">Actualizar</button></td>
-    <td id="del-${id}"><button class="btn btn-primary me-md-2" type="button">Borrar</button></td>
-  </tr>
-    `
+        <tr>
+        <td>${order}</td>
+        <td>${id}</td>
+        <td>${name}</td>
+        <td>${last}</td>
+        <td>${email}</td>
+        <td>${profile}</td>
+        <td id="act-${id}"><button class="btn btn-primary me-md-2" type="button">Actualizar</button></td>
+        <td id="del-${id}"><button class="btn btn-primary me-md-2" type="button">Borrar</button></td>
+        </tr>
+        `
 }
 
 /**
- * Borrar usuario
- * 
+* Borrar usuario
+* 
  */
 const delUser = (userID, name, last_name) => {
 
@@ -202,6 +204,8 @@ const doSearch = (z) => {
 
 //ejecuto la busqueda para cargar los usuarios de la base de datos
 searchUser(urlALL);
+//oculta la seccion de usuarios
+hideContact(userDiv)
 //LISTENERS
 USERSEARCHBTN.addEventListener('click', () => searchUser(urlUSER, NAME.value));
 NAME.addEventListener('keypress', doSearch);

@@ -1,11 +1,12 @@
-import { fetchdata, getdata, deldata } from '../routes/fetchdata.js';
-import { rutas } from '../scripts/rutas.js'
+import { fetchdata, getdata, deldata, hideContact } from '../backend/fetchdata.js';
+import { rutas } from './rutas.js'
 
 //constantes
 const NAME = document.querySelector('#nameCia');
 const CIASEARCHBTN = document.querySelector('#searchCiabtn');
 const USERFORMUPDATE = document.querySelector('#UserFormUpdate');
 const CIAFORMCONTAINER = document.getElementById('ciaFormContainer');
+const userDiv = document.querySelector('#userDiv');
 
 //constantes form creación actualización de cia
 const ID = document.querySelector('#id');
@@ -43,10 +44,10 @@ const addCia = () => {
     fetchdata(urlCIA, 'POST', data)
         .then((res) => {
             alert(res.Mensaje)
-            //console.log(res)
-            console.log("ciacityselect ", CIACITYSELECT.value)
+            //console.log("res ", res.Mensaje)
+            //console.log("ciacityselect ", CIACITYSELECT.value)
             CIAFORM.reset();
-            //window.location.href = '../pages/companieslist.html';
+            window.location.href = '../pages/companieslist.html';
         })
         .catch((err) => {
             console.log("err create CIA", err)
@@ -105,7 +106,8 @@ function popUpCity() {
 
 //Para el popup de countries
 forPopUp(urlCOUNRTY, "", COUNTRYSELECT)
-
+//oculta la seccion de usuarios
+hideContact(userDiv)
 //listener
 CIAADDBTN.addEventListener('click', addCia)
 COUNTRYSELECT.addEventListener('change', popUpCity)

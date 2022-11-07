@@ -98,7 +98,7 @@ city_route.get('/city/', async (req, res) => {
  *  */
 
 //importo los modelos
-const { Country } = require('../routes/country');
+const { Country } = require('../backend/country');
 //armo las relaciones entre modelos
 Country.hasMany(City, {
     foreignKey: 'country_id'

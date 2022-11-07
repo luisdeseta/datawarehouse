@@ -114,6 +114,14 @@ h2 {
   flex-wrap: nowrap;
 }
 
+#userDiv {
+  display: none;
+}
+
+#contactSelect {
+  display: none;
+}
+
 #addBTNContainer {
   padding: 0 10px 10px 0;
 }

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="../style/style.css" />
     <title>Login</title>
 </head>
 
@@ -15,7 +15,7 @@
           <a class="nav-link active" aria-current="page" href="./contacts.html">Contactos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="./userslist.html">Usuarios</a>
+         <!--  <a class="nav-link active" aria-current="page" id="userDiv" href="./userslist.html">Usuarios</a> -->
         </li>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="./companieslist.html">Compañías</a>
@@ -37,14 +37,14 @@
               </div>
               <div class="mb-3">
                 <label for="formGroupExampleInput2" class="form-label">Contraseña</label>
-                <input type="text" class="form-control" id="userPass" placeholder="Contraseña">
+                <input type="password" class="form-control" id="userPass" placeholder="Contraseña">
               </div>
     
             <button type="submit" class="btn btn-primary" id="btnLogin">Ingresar</button>
           
 
     </div>
-    <script type="module" src="../scripts/login.js"></script>
+    <script type="module" src="../frontend/login.js"></script>
     <!-- <script type="module" src="../services/services.js" ></script> -->
 </body>
 </html>

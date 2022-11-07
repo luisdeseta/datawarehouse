@@ -103,7 +103,10 @@ cont_channels.post('/contactchannels/creates', async (req, res) => {
                 account: req.body[4].account,
                 preference: req.body[4].preference
             }
-            ])
+            ],
+            {
+                updateOnDuplicate: ["account", "preference"]
+            })
 
         //console.log("newContacts", newContact)
         res.status(200).json({ Mensaje: `Contactos & Channels creados con éxito` })
@@ -172,20 +175,55 @@ cont_channels.get('/getall', async (req, res) => {
 cont_channels.put('/contactchannels', async (req, res) => {
     try {
         //verificar duplicados
-        const verifyContact = await ContChannels.findAll({
-            where: { id: req.body.id }
-        })
-        if (verifyContact == 0) return res.status('403').json({ mensaje: `${req.body.id} no existe` })
+        /*         const verifyContact = await ContChannels.findAll({
+                    where: { id: req.body.id }
+                })
+                if (verifyContact == 0) return res.status('403').json({ mensaje: `${req.body.id} no existe` }) */
+        //Se puede actualizar masivamente con bulkCreate y updateOnDuplicate
+        const query = await ContChannels.bulkCreate(
+            [{
+                id: req.body[0].id,
+                contacts_id: req.body[0].contacts_id,
+                channels_id: req.body[0].channels_id,
+                account: req.body[0].account,
+                preference: req.body[0].preference
+            },
+            {
+                id: req.body[1].id,
+                contacts_id: req.body[1].contacts_id,
+                channels_id: req.body[1].channels_id,
+                account: req.body[1].account,
+                preference: req.body[1].preference
+            },
+            {
+                id: req.body[2].id,
+                contacts_id: req.body[2].contacts_id,
+                channels_id: req.body[2].channels_id,
+                account: req.body[2].account,
+                preference: req.body[2].preference
+            },
+            {
+                id: req.body[3].id,
+                contacts_id: req.body[3].contacts_id,
+                channels_id: req.body[3].channels_id,
+                account: req.body[3].account,
+                preference: req.body[3].preference
+            },
+            {
+                id: req.body[4].id,
+                contacts_id: req.body[4].contacts_id,
+                channels_id: req.body[4].channels_id,
+                account: req.body[4].account,
+                preference: req.body[4].preference
+            }
+            ],
+            {
+                updateOnDuplicate: ["account", "preference"]
+            })
 
-        await ContChannels.update({
-            contacts_id: req.body.contacts_id,
-            channels_id: req.body.channels_id,
-            account: req.body.account,
-            preference: req.body.preference,
-        },
-            { where: { id: verifyContact[0].id } }
-        )
-        res.status(200).json({ Status: `Contacto ${verifyContact[0].contact_id}, ${verifyContact[0].account}  actualizada!` })
+
+        //res.status(200).json({ Status: `Contacto Contact & Channels actualizados!!` })
+        res.status(201).json({ query })
 
     } catch (error) {
         res.status(401).json({ Status: 'Error en la sentencia SQL', error })

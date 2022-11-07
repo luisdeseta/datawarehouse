@@ -1,5 +1,5 @@
-import { fetchdata, getdata, deldata } from '../routes/fetchdata.js';
-import { rutas } from '../scripts/rutas.js'
+import { fetchdata, getdata, deldata, hideContact } from '../backend/fetchdata.js';
+import { rutas } from '../frontend/rutas.js'
 
 //constantes
 const regionContactSelect = document.querySelector('#regionContactSelect');
@@ -7,6 +7,7 @@ const paisContactSelect = document.querySelector('#paisContactSelect');
 const cityContactSelect = document.querySelector('#cityContactSelect');
 const createContactbtn = document.querySelector('#createContactbtn')
 const ciaContact = document.querySelector('#ciaContact');
+const userDiv = document.querySelector('#userDiv');
 //constantes creacion de contacto
 const contactNameForm = document.querySelector('#contactNameForm');
 const conctactLastNameForm = document.querySelector('#conctactLastNameForm');
@@ -56,13 +57,15 @@ function addContact() {
     fetchdata(urlCONTACT, 'POST', data)
         .then((res) => {
             alert(res.Mensaje)
-            console.log(res);
-            //createContactForm.reset();
+            //console.log("res addContact ??", res);
             newContactID = res.newContact
         })
         .then((res) => {
             //agrego los canales para el contacto
-            addContactChannel()
+            addContactChannel();
+            createContactForm.reset();
+            window.location.href = '../pages/contacts.html';
+
         })
         .catch((err) => {
             console.log("err create contact", err)
@@ -184,7 +187,8 @@ function popUpCity() {
     const countryID = paisContactSelect.value
     forPopUp(urlCITYBYCOUNTRY, `?country=${countryID}`, cityContactSelect)
 }
-
+//oculta la seccion de usuarios
+hideContact(userDiv)
 //Listenner
 createContactbtn.addEventListener('click', () => { addContact() })
 regionContactSelect.addEventListener('change', popUpCountry)

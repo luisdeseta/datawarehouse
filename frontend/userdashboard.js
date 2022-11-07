@@ -1,5 +1,5 @@
-import { fetchdata, getdata } from '../routes/fetchdata.js';
-import { rutas } from '../scripts/rutas.js'
+import { fetchdata, getdata, hideContact } from '../backend/fetchdata.js';
+import { rutas } from '../frontend/rutas.js'
 
 //constantes
 const NAME = document.querySelector('#name');
@@ -11,6 +11,7 @@ const confirmPASS = document.querySelector('#inputPassword2');
 const ERRORPASS = document.querySelector('#errorPass')
 const USERBTN = document.querySelector('#createUserbtn');
 const userERROR = document.querySelector('#userError');
+const userDiv = document.querySelector('#userDiv');
 
 const urlUSER = rutas.urlUSER;
 
@@ -41,5 +42,6 @@ const create = () => {
         })
 }
 
-
+//oculta la seccion de usuarios
+hideContact(userDiv)
 USERBTN.addEventListener('click', create)

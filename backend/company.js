@@ -117,7 +117,7 @@ cia_route.put('/cia', async (req, res) => {
     }
 })
 //Traigo los modelos para poder traer el nombre de la cia
-const { City } = require('../routes/city');
+const { City } = require('../backend/city');
 //armo las relaciones entre modelos
 City.hasMany(Company, {
     foreignKey: 'city_id'

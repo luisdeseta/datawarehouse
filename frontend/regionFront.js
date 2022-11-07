@@ -1,5 +1,5 @@
-import { fetchdata, getdata, deldata, getD } from '../routes/fetchdata.js';
-import { rutas } from '../scripts/rutas.js'
+import { fetchdata, getdata, deldata, getD, hideContact } from '../backend/fetchdata.js';
+import { rutas } from '../frontend/rutas.js'
 
 //constantes
 const addREGIONBTN = document.querySelector('#addRegionBTN')
@@ -7,6 +7,7 @@ const NEWREGION = document.querySelector('#regionName');
 const CREATEREGIONBTN = document.querySelector('#createRegionBtn')
 const REGIONMODAL = document.querySelector('#regionFormContainer');
 const CANCELBTN = document.querySelector('#cancelRegionBtn');
+const userDiv = document.querySelector('#userDiv');
 //URL para fetch
 const urlRegion = rutas.urlRegion;
 const urlCountry = rutas.url1Country;
@@ -182,7 +183,8 @@ const cancelBTN = () => {
   //alert("boton cerrar");
   REGIONMODAL.style.display = "none";
 }
-
+//oculta la seccion de usuarios
+hideContact(userDiv)
 //testBTN.addEventListener('click', regionTree)
 CREATEREGIONBTN.addEventListener('click', newRegions)
 CANCELBTN.addEventListener('click', cancelBTN)
